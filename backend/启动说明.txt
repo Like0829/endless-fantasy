@@ -1,0 +1,106 @@
+========================================
+  无尽幻境 Demo 启动说明
+========================================
+
+一、环境准备
+----------------------------------------
+1. 安装 Python 3.8+
+2. 安装 MySQL 5.7+ 或 8.0
+3. 确保 MySQL 服务正在运行
+
+
+二、数据库初始化
+----------------------------------------
+1. 打开 MySQL 命令行或客户端（如 Navicat、DBeaver）
+
+2. 执行初始化脚本：
+   mysql -u root -p < init.sql
+
+   或者复制 init.sql 中的内容到客户端执行
+
+
+三、修改配置
+----------------------------------------
+编辑 config.py 文件，修改数据库连接信息：
+
+   DB_CONFIG = {
+       "host": "localhost",      # MySQL地址
+       "port": 3306,             # MySQL端口
+       "user": "root",           # 你的MySQL用户名
+       "password": "password",   # 你的MySQL密码
+       "database": "endless_fantasy",
+       "charset": "utf8mb4"
+   }
+
+
+四、安装依赖
+----------------------------------------
+在 backend 目录下执行：
+
+   pip install -r requirements.txt
+
+
+五、启动服务
+----------------------------------------
+执行以下命令：
+
+   python app.py
+
+或者：
+
+   uvicorn app:app --host 0.0.0.0 --port 8000 --reload
+
+服务启动后访问：
+   http://localhost:8000
+
+API文档（自动生成）：
+   http://localhost:8000/docs
+
+
+六、测试API
+----------------------------------------
+启动服务后，另开一个终端执行：
+
+   python test_api.py
+
+或者使用 curl 测试：
+
+   # 获取世界状态
+   curl http://localhost:8000/world-state
+
+   # 获取氛围值
+   curl http://localhost:8000/atmosphere
+
+   # 更新氛围值
+   curl -X POST http://localhost:8000/update-atmosphere -H "Content-Type: application/json" -d "{\"change\": 10}"
+
+   # 获取任务列表
+   curl http://localhost:8000/tasks
+
+   # 接受任务
+   curl -X POST http://localhost:8000/accept-task -H "Content-Type: application/json" -d "{\"task_id\": \"task_001\", \"player\": \"玩家A\"}"
+
+   # 完成任务
+   curl -X POST http://localhost:8000/complete-task -H "Content-Type: application/json" -d "{\"task_id\": \"task_001\", \"player\": \"玩家A\"}"
+
+   # 添加留言
+   curl -X POST http://localhost:8000/add-message -H "Content-Type: application/json" -d "{\"location\": \"图书馆\", \"content\": \"别相信镜子\", \"player\": \"玩家A\", \"player_status\": \"dead\"}"
+
+
+七、接入Dify
+----------------------------------------
+1. 参考 dify/chatflow配置说明.md 配置工作流
+2. 将 HTTP 请求节点的 URL 改为你的后端地址
+3. 如果本地测试，需要使用内网穿透工具（如 ngrok）获取公网地址
+
+
+八、常见问题
+----------------------------------------
+Q: 启动报错 "ModuleNotFoundError: No module named 'pymysql'"
+A: 执行 pip install pymysql
+
+Q: 连接数据库失败
+A: 检查 config.py 中的数据库配置是否正确，MySQL服务是否启动
+
+Q: 端口被占用
+A: 修改 app.py 中的端口号，或关闭占用8000端口的程序

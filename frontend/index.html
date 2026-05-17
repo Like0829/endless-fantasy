@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>无尽幻境 - AI游戏主持</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 50%, #0d0d2b 100%);
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* ========== 开场欢迎界面 ========== */
+        .welcome-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('welcome.jpg') center center / cover no-repeat;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        .welcome-screen::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            pointer-events: none;
+        }
+
+        .welcome-screen::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border: 2px solid rgba(255,107,107,0.1);
+            border-radius: 20px;
+            margin: 30px;
+            pointer-events: none;
+        }
+
+        .welcome-screen.hidden {
+            opacity: 0;
+            transform: scale(1.1);
+            pointer-events: none;
+        }
+
+        .welcome-title {
+            font-size: 5.5em;
+            color: #ff6b6b;
+            text-shadow: 0 0 60px rgba(255, 107, 107, 0.9), 0 0 120px rgba(255, 107, 107, 0.5), 0 0 200px rgba(255, 50, 50, 0.3);
+            margin-bottom: 20px;
+            animation: titlePulse 3s ease-in-out infinite;
+            letter-spacing: 8px;
+            font-weight: bold;
+        }
+
+        @keyframes titlePulse {
+            0%, 100% { transform: scale(1); text-shadow: 0 0 60px rgba(255, 107, 107, 0.9); }
+            50% { transform: scale(1.08); text-shadow: 0 0 100px rgba(255, 107, 107, 1), 0 0 200px rgba(255, 50, 50, 0.5); }
+        }
+
+        .welcome-subtitle {
+            font-size: 1.5em;
+            color: #aaa;
+            margin-bottom: 40px;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .welcome-start-btn {
+            padding: 18px 60px;
+            font-size: 1.3em;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 40px rgba(255, 107, 107, 0.6);
+            letter-spacing: 3px;
+            font-weight: bold;
+        }
+
+        .welcome-start-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 50px rgba(255, 107, 107, 0.8);
+        }
+
+        .welcome-fog {
+            position: absolute;
+            width: 200%;
+            height: 100%;
+            background: radial-gradient(ellipse at 30% 50%, rgba(180,140,60,0.06) 0%, transparent 40%);
+            animation: fogMove 25s ease-in-out infinite alternate;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        @keyframes fogMove {
+            0% { transform: translateX(-30%); }
+            100% { transform: translateX(30%); }
+        }
+
+        .welcome-particle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: welcomeGlow 4s ease-in-out infinite alternate;
+            box-shadow: 0 0 40px currentColor, 0 0 80px currentColor;
+            mix-blend-mode: screen;
+        }
+
+        @keyframes welcomeGlow {
+            0% { transform: translateY(-30px) scale(0.6); opacity: 0.2; }
+            100% { transform: translateY(30px) scale(1.4); opacity: 1; }
+        }
+
+        .welcome-particle:nth-child(odd) {
+            animation: welcomeDrift 5s ease-in-out infinite alternate;
+        }
+
+        @keyframes welcomeDrift {
+            0% { transform: translateX(-50px) scale(0.8); opacity: 0.3; }
+            100% { transform: translateX(50px) scale(1.5); opacity: 1; }
+        }
+
+        /* ========== 背景氛围效果 ========== */
+        .atmosphere-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .fog-layer {
+            position: absolute;
+            width: 200%;
+            height: 100%;
+            background: radial-gradient(ellipse at 20% 50%, rgba(255,200,100,0.15) 0%, transparent 40%),
+                        radial-gradient(ellipse at 80% 30%, rgba(255,100,100,0.1) 0%, transparent 40%),
+                        radial-gradient(ellipse at 50% 80%, rgba(200,180,80,0.08) 0%, transparent 40%);
+            animation: fogDrift 15s ease-in-out infinite;
+        }
+
+        @keyframes fogDrift {
+            0%, 100% { transform: translateX(-30%) scale(1); }
+            50% { transform: translateX(15%) scale(1.15); }
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at center, rgba(255,200,100,0.8), rgba(255,100,100,0.3));
+            box-shadow: 0 0 6px rgba(255,200,100,0.4);
+            animation: particleFloat 10s linear infinite;
+        }
+
+        @keyframes particleFloat {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
+        }
+
+        /* ========== 游戏主布局 ========== */
+        .game-layout {
+            display: none;
+            position: relative;
+            z-index: 1;
+            height: 100vh;
+            padding: 15px;
+            gap: 15px;
+        }
+
+        .game-layout.active {
+            display: flex;
+        }
+
+        /* ========== 左侧信息面板 ========== */
+        .side-panel {
+            width: 780px;
+            min-width: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .side-panel::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .side-panel::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 2px;
+        }
+
+        .panel-card {
+            background: rgba(15, 15, 35, 0.9);
+            border: 1px solid rgba(140, 100, 40, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px rgba(140, 100, 40, 0.1);
+        }
+
+        .panel-card h3 {
+            color: #e6c76a;
+            font-size: 0.95em;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .panel-card h3 .icon {
+            font-size: 1.1em;
+        }
+
+        /* ========== 角色状态 ========== */
+        .stat-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .stat-bar {
+            width: 100%;
+        }
+
+        .stat-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            font-size: 0.85em;
+        }
+
+        .stat-name {
+            color: #e6c76a;
+            font-weight: bold;
+        }
+
+        .stat-value {
+            color: #fff;
+        }
+
+        .stat-progress {
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .stat-progress-bar {
+            height: 100%;
+            border-radius: 5px;
+            transition: width 0.5s ease, background 0.3s ease;
+        }
+
+        .hp-bar {
+            background: linear-gradient(90deg, #ff4757, #ff6b6b);
+        }
+
+        .san-bar {
+            background: linear-gradient(90deg, #d4a843, #e6c76a);
+        }
+
+        .stat-bar.warning .stat-progress-bar {
+            animation: warningPulse 1s ease-in-out infinite;
+        }
+
+        @keyframes warningPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .stat-bar.critical .stat-progress-bar {
+            animation: criticalFlash 0.5s ease-in-out infinite;
+        }
+
+        @keyframes criticalFlash {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .character-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .info-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 0.8em;
+        }
+
+        .info-label {
+            color: #888;
+            margin-right: 4px;
+        }
+
+        .info-value {
+            color: #e6c76a;
+        }
+
+        /* ========== 世界状态 ========== */
+        .atmosphere-display {
+            text-align: center;
+            padding: 14px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            margin-bottom: 12px;
+        }
+
+        .atmosphere-value {
+            font-size: 2.2em;
+            color: #ffd93d;
+            text-shadow: 0 0 20px rgba(255, 217, 61, 0.5);
+            font-weight: bold;
+        }
+
+        .atmosphere-label {
+            color: #aaa;
+            font-size: 0.8em;
+            margin-top: 4px;
+        }
+
+        .atmosphere-desc {
+            color: #888;
+            font-size: 0.8em;
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        .tasks-section {
+            margin-top: 12px;
+        }
+
+        .tasks-section h4 {
+            color: #ffd93d;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+        }
+
+        .task-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 8px;
+        }
+
+        .task-name {
+            font-weight: bold;
+            margin-bottom: 4px;
+            color: #fff;
+            font-size: 0.85em;
+        }
+
+        .task-description {
+            font-size: 0.78em;
+            color: #aaa;
+            margin-bottom: 6px;
+        }
+
+        .task-status {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.72em;
+            font-weight: bold;
+        }
+
+        .status-pending {
+            background: rgba(255, 217, 61, 0.2);
+            color: #ffd93d;
+            border: 1px solid rgba(255, 217, 61, 0.3);
+        }
+
+        .status-in-progress {
+            background: rgba(140, 100, 40, 0.2);
+            color: #e6c76a;
+            border: 1px solid rgba(140, 100, 40, 0.3);
+        }
+
+        .status-completed {
+            background: rgba(46, 213, 115, 0.2);
+            color: #2ed573;
+            border: 1px solid rgba(46, 213, 115, 0.3);
+        }
+
+        .task-player {
+            font-size: 0.72em;
+            color: #888;
+            margin-top: 4px;
+        }
+
+        /* ========== 留言板 ========== */
+        .messages-desc {
+            color: #888;
+            font-size: 0.8em;
+            margin-bottom: 10px;
+        }
+
+        .message-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-left: 3px solid #ff6b6b;
+        }
+
+        .message-location {
+            font-size: 0.75em;
+            color: #e6c76a;
+            margin-bottom: 4px;
+        }
+
+        .message-content {
+            color: #fff;
+            line-height: 1.5;
+            margin-bottom: 4px;
+            font-size: 0.82em;
+        }
+
+        .message-player {
+            font-size: 0.72em;
+            color: #888;
+            text-align: right;
+        }
+
+        .message-dead {
+            border-left-color: #ff4757;
+        }
+
+        .message-alive {
+            border-left-color: #2ed573;
+        }
+
+        .refresh-btn {
+            display: inline-block;
+            padding: 6px 12px;
+            background: linear-gradient(135deg, #d4a843, #a67c00);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.78em;
+            transition: all 0.3s ease;
+            margin-top: 8px;
+        }
+
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(180, 140, 60, 0.4);
+        }
+
+        /* ========== 右侧对话区 ========== */
+        .chat-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(140, 100, 40, 0.3);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 0 80px rgba(140, 100, 40, 0.1),
+                        0 0 30px rgba(0, 0, 0, 0.5),
+                        inset 0 0 60px rgba(0, 0, 0, 0.4);
+            position: relative;
+        }
+
+        /* 背景图片层 */
+        .chat-bg {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url('背景图.png') center center / cover no-repeat;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* 背景暗色叠加层 */
+        .chat-bg-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background:
+                radial-gradient(ellipse at 20% 80%, rgba(140, 80, 0, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(80, 60, 20, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(10, 10, 25, 0.6) 0%, rgba(5, 5, 15, 0.7) 100%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* 移动光晕效果 */
+        .chat-glow {
+            position: absolute;
+            top: -30%;
+            left: -20%;
+            width: 80%;
+            height: 80%;
+            background: radial-gradient(ellipse, rgba(255, 200, 100, 0.15) 0%, rgba(255, 100, 100, 0.08) 30%, transparent 70%);
+            z-index: 1;
+            pointer-events: none;
+            animation: glowDrift 8s ease-in-out infinite;
+        }
+
+        @keyframes glowDrift {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(40px, 30px) scale(1.1); }
+            66% { transform: translate(-20px, 50px) scale(0.9); }
+        }
+
+        /* 迷雾层 - 横向飘动 */
+        .chat-mist {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(255, 200, 100, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 30%, rgba(255, 100, 100, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(200, 180, 100, 0.06) 0%, transparent 40%);
+            z-index: 1;
+            pointer-events: none;
+            animation: mistShift 6s ease-in-out infinite alternate;
+        }
+
+        @keyframes mistShift {
+            0% { transform: scale(1) translateX(0) translateY(0); opacity: 0.5; }
+            50% { transform: scale(1.15) translateX(15px) translateY(-10px); opacity: 1; }
+            100% { transform: scale(1.05) translateX(30px) translateY(5px); opacity: 0.8; }
+        }
+
+        /* 顶部发光边线 */
+        .chat-panel::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #d4a843, #ff6b6b, #d4a843, transparent);
+            opacity: 0.7;
+            z-index: 3;
+        }
+
+        .chat-panel > *:not(.chat-bg):not(.chat-bg-overlay):not(.chat-glow):not(.chat-mist) {
+            position: relative;
+            z-index: 2;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, rgba(140, 100, 40, 0.15), rgba(255, 107, 107, 0.1));
+            padding: 14px 20px;
+            border-bottom: 1px solid rgba(140, 100, 40, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-header h3 {
+            color: #e6c76a;
+            font-size: 1.05em;
+            text-shadow: 0 0 15px rgba(220, 190, 80, 0.4);
+            letter-spacing: 2px;
+        }
+
+        .chat-stats {
+            display: flex;
+            gap: 12px;
+            padding: 10px 20px;
+            background: rgba(50, 20, 80, 0.15);
+            border-bottom: 1px solid rgba(140, 100, 40, 0.12);
+        }
+
+        .chat-stat {
+            flex: 1;
+            text-align: center;
+        }
+
+        .chat-stat-label {
+            font-size: 0.7em;
+            color: #888;
+            margin-bottom: 3px;
+        }
+
+        .chat-stat-bar {
+            height: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .chat-stat-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        .chat-stat-fill.hp {
+            background: linear-gradient(90deg, #ff4757, #ff6b6b);
+        }
+
+        .chat-stat-fill.san {
+            background: linear-gradient(90deg, #d4a843, #e6c76a);
+        }
+
+        .chat-stat-value {
+            font-size: 0.7em;
+            color: #fff;
+            margin-top: 2px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            background:
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 40px,
+                    rgba(140, 100, 40, 0.015) 40px,
+                    rgba(140, 100, 40, 0.015) 41px
+                ),
+                radial-gradient(ellipse at 50% 0%, rgba(140, 100, 40, 0.05) 0%, transparent 60%);
+        }
+
+        .chat-message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 14px;
+            font-size: 0.92em;
+            line-height: 1.7;
+            animation: messageIn 0.3s ease;
+            position: relative;
+            white-space: pre-wrap;
+        }
+
+        @keyframes messageIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .chat-message-ai {
+            align-self: flex-start;
+            background: linear-gradient(135deg, rgba(140, 100, 40, 0.12), rgba(0, 180, 220, 0.08));
+            border: 1px solid rgba(140, 100, 40, 0.2);
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 2px 10px rgba(140, 100, 40, 0.08);
+        }
+
+        .chat-message-user {
+            align-self: flex-end;
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(200, 60, 60, 0.15));
+            border: 1px solid rgba(255, 107, 107, 0.2);
+            border-bottom-right-radius: 4px;
+            box-shadow: 0 2px 10px rgba(255, 107, 107, 0.06);
+        }
+
+        .chat-message-system {
+            align-self: center;
+            background: rgba(140, 100, 40, 0.1);
+            border: 1px solid rgba(140, 100, 40, 0.2);
+            color: #e6c76a;
+            font-style: italic;
+            font-size: 0.85em;
+        }
+
+        /* ========== 消息格式化 ========== */
+        .chat-message .hp-change {
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+
+        .chat-message .san-change {
+            color: #e6c76a;
+            font-weight: bold;
+        }
+
+        .chat-message .check-success {
+            color: #2ed573;
+            font-weight: bold;
+        }
+
+        .chat-message .check-fail {
+            color: #ff4757;
+            font-weight: bold;
+        }
+
+        .chat-message .location {
+            color: #e6c76a;
+            font-weight: bold;
+        }
+
+        .chat-message .item {
+            color: #ffd93d;
+        }
+
+        /* ========== 快捷操作按钮 ========== */
+        .quick-actions {
+            display: flex;
+            gap: 8px;
+            padding: 10px 20px;
+            flex-wrap: wrap;
+            border-top: 1px solid rgba(140, 100, 40, 0.1);
+            background: rgba(50, 20, 80, 0.1);
+        }
+
+        .quick-btn {
+            padding: 6px 14px;
+            background: rgba(140, 100, 40, 0.08);
+            border: 1px solid rgba(140, 100, 40, 0.2);
+            border-radius: 18px;
+            color: #e6c76a;
+            font-size: 0.8em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .quick-btn:hover {
+            background: rgba(140, 100, 40, 0.2);
+            border-color: rgba(220, 190, 80, 0.4);
+            color: #e6c76a;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 10px rgba(140, 100, 40, 0.15);
+        }
+
+        .chat-input-area {
+            padding: 14px 20px;
+            border-top: 1px solid rgba(140, 100, 40, 0.2);
+            display: flex;
+            gap: 12px;
+            background: linear-gradient(to top, rgba(50, 20, 80, 0.3), rgba(0, 0, 0, 0.2));
+        }
+
+        .chat-input-area input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid rgba(140, 100, 40, 0.2);
+            border-radius: 10px;
+            background: rgba(140, 100, 40, 0.08);
+            color: #fff;
+            font-size: 0.92em;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .chat-input-area input::placeholder {
+            color: rgba(220, 190, 80, 0.35);
+        }
+
+        .chat-input-area input:focus {
+            background: rgba(140, 100, 40, 0.12);
+            border-color: rgba(220, 190, 80, 0.4);
+            box-shadow: 0 0 15px rgba(140, 100, 40, 0.15);
+        }
+
+        .chat-send-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #d4a843, #a67c00);
+            color: #fff;
+            font-size: 0.92em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 15px rgba(180, 140, 60, 0.3);
+        }
+
+        .chat-send-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(180, 140, 60, 0.5);
+        }
+
+        .chat-send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .chat-typing {
+            align-self: flex-start;
+            color: #e6c76a;
+            font-style: italic;
+            font-size: 0.85em;
+        }
+
+        .typing-dots {
+            display: inline-block;
+        }
+
+        .typing-dots span {
+            animation: typingDot 1.4s infinite;
+            display: inline-block;
+        }
+
+        .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typingDot {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-5px); }
+        }
+
+        /* ========== 死亡/疯狂特效 ========== */
+        .screen-effect {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .screen-effect.active {
+            opacity: 1;
+        }
+
+        .death-effect {
+            background: radial-gradient(ellipse at center, transparent 0%, rgba(255, 0, 0, 0.3) 100%);
+        }
+
+        .madness-effect {
+            background: radial-gradient(ellipse at center, transparent 0%, rgba(128, 0, 128, 0.3) 100%);
+            animation: madnessWobble 0.5s ease-in-out infinite;
+        }
+
+        @keyframes madnessWobble {
+            0%, 100% { transform: skewX(0deg); }
+            25% { transform: skewX(2deg); }
+            75% { transform: skewX(-2deg); }
+        }
+
+        /* ========== 响应式设计 ========== */
+        @media (max-width: 900px) {
+            .welcome-title {
+                font-size: 3em;
+            }
+
+            .game-layout {
+                flex-direction: column;
+                height: auto;
+                min-height: 100vh;
+            }
+
+            .side-panel {
+                width: 100%;
+                min-width: unset;
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 10px;
+                overflow-y: visible;
+                padding-right: 0;
+            }
+
+            .panel-card {
+                flex: 1;
+                min-width: 250px;
+            }
+
+            .chat-panel {
+                flex: 1;
+                max-width: unset;
+                min-height: 60vh;
+            }
+        }
+
+        /* ========== 滚动条样式 ========== */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+    </style>
+</head>
+<body>
+    <!-- 开场欢迎界面 -->
+    <div class="welcome-screen" id="welcomeScreen">
+        <div class="welcome-fog"></div>
+        <div class="welcome-particle" style="left:5%; top:15%; width:28px; height:28px; color:#ff6b6b; background:radial-gradient(circle, #ff6b6b 0%, transparent 70%); animation-delay:0s;"></div>
+        <div class="welcome-particle" style="left:25%; top:70%; width:18px; height:18px; color:#ffd93d; background:radial-gradient(circle, #ffd93d 0%, transparent 70%); animation-delay:1.5s;"></div>
+        <div class="welcome-particle" style="left:50%; top:25%; width:24px; height:24px; color:#ff9f43; background:radial-gradient(circle, #ff9f43 0%, transparent 70%); animation-delay:0.8s;"></div>
+        <div class="welcome-particle" style="left:75%; top:75%; width:14px; height:14px; color:#ff6b6b; background:radial-gradient(circle, #ff6b6b 0%, transparent 70%); animation-delay:2.2s;"></div>
+        <div class="welcome-particle" style="left:88%; top:35%; width:20px; height:20px; color:#ffd93d; background:radial-gradient(circle, #ffd93d 0%, transparent 70%); animation-delay:3s;"></div>
+        <div class="welcome-particle" style="left:15%; top:85%; width:22px; height:22px; color:#e6c76a; background:radial-gradient(circle, #e6c76a 0%, transparent 70%); animation-delay:1s;"></div>
+        <div class="welcome-particle" style="left:65%; top:10%; width:12px; height:12px; color:#ff9f43; background:radial-gradient(circle, #ff9f43 0%, transparent 70%); animation-delay:2.8s;"></div>
+        <div class="welcome-particle" style="left:42%; top:55%; width:26px; height:26px; color:#ff4757; background:radial-gradient(circle, #ff4757 0%, transparent 70%); animation-delay:0.3s;"></div>
+        <h1 class="welcome-title">无尽幻境</h1>
+        <p class="welcome-subtitle">
+            AI驱动的多人异步角色扮演冒险<br>
+            你的每一个选择，都将影响这个世界
+        </p>
+        <button class="welcome-start-btn" onclick="startGame()">开始冒险</button>
+    </div>
+
+    <!-- 背景氛围效果 -->
+    <div class="atmosphere-bg" id="atmosphereBg">
+        <div class="fog-layer"></div>
+    </div>
+
+    <!-- 死亡/疯狂特效 -->
+    <div class="screen-effect death-effect" id="deathEffect"></div>
+    <div class="screen-effect madness-effect" id="madnessEffect"></div>
+
+    <!-- 游戏主布局：左侧信息 + 右侧对话 -->
+    <div class="game-layout" id="gameLayout">
+
+        <!-- 左侧信息面板 -->
+        <div class="side-panel">
+            <!-- 角色状态 -->
+            <div class="panel-card">
+                <h3><span class="icon">👤</span> 角色状态</h3>
+                <div class="stat-bars">
+                    <div class="stat-bar" id="hpBar">
+                        <div class="stat-label">
+                            <span class="stat-name">生命值 HP</span>
+                            <span class="stat-value" id="hpValue">100/100</span>
+                        </div>
+                        <div class="stat-progress">
+                            <div class="stat-progress-bar hp-bar" id="hpProgress" style="width: 100%"></div>
+                        </div>
+                    </div>
+                    <div class="stat-bar" id="sanBar">
+                        <div class="stat-label">
+                            <span class="stat-name">理智值 SAN</span>
+                            <span class="stat-value" id="sanValue">100/100</span>
+                        </div>
+                        <div class="stat-progress">
+                            <div class="stat-progress-bar san-bar" id="sanProgress" style="width: 100%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="character-info">
+                    <div class="info-item">
+                        <span class="info-label">名称:</span>
+                        <span class="info-value" id="playerName">调查员</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">位置:</span>
+                        <span class="info-value" id="currentLocation">小镇入口</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">物品:</span>
+                        <span class="info-value" id="inventory">手电筒,笔记本,急救包</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 世界状态 -->
+            <div class="panel-card">
+                <h3><span class="icon">🌍</span> 世界状态</h3>
+                <div class="atmosphere-display">
+                    <div class="atmosphere-value" id="atmosphereValue">50</div>
+                    <div class="atmosphere-label">城镇氛围值</div>
+                    <div class="atmosphere-desc" id="atmosphereDesc">迷雾笼罩着小镇，一切都显得那么诡异...</div>
+                </div>
+                <div class="tasks-section">
+                    <h4>悬赏任务</h4>
+                    <div id="tasksList"></div>
+                </div>
+                <button class="refresh-btn" onclick="loadWorldState()">刷新状态</button>
+            </div>
+
+            <!-- 死亡墓碑 -->
+            <div class="panel-card">
+                <h3><span class="icon">📝</span> 死亡墓碑</h3>
+                <p class="messages-desc">记录着前辈调查员的遗言...</p>
+                <div id="messagesList"></div>
+                <button class="refresh-btn" onclick="loadMessages()">刷新留言</button>
+            </div>
+        </div>
+
+        <!-- 右侧对话区 -->
+        <div class="chat-panel">
+            <div class="chat-bg"></div>
+            <div class="chat-bg-overlay"></div>
+            <div class="chat-glow"></div>
+            <div class="chat-mist"></div>
+            <div class="chat-header">
+                <h3>AI游戏主持人</h3>
+                <div class="chat-stats">
+                    <div class="chat-stat">
+                        <div class="chat-stat-label">HP</div>
+                        <div class="chat-stat-bar">
+                            <div class="chat-stat-fill hp" id="chatHpBar" style="width: 100%"></div>
+                        </div>
+                        <div class="chat-stat-value" id="chatHpValue">100</div>
+                    </div>
+                    <div class="chat-stat">
+                        <div class="chat-stat-label">SAN</div>
+                        <div class="chat-stat-bar">
+                            <div class="chat-stat-fill san" id="chatSanBar" style="width: 100%"></div>
+                        </div>
+                        <div class="chat-stat-value" id="chatSanValue">100</div>
+                    </div>
+                </div>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="chat-message chat-message-system">
+                    欢迎来到无尽幻境！请输入你的调查员名称开始冒险...
+                </div>
+            </div>
+            <div class="quick-actions">
+                <button class="quick-btn" onclick="sendQuickAction('查看周围环境')">查看周围</button>
+                <button class="quick-btn" onclick="sendQuickAction('查看携带物品')">查看物品</button>
+                <button class="quick-btn" onclick="sendQuickAction('查看可用任务')">查看任务</button>
+                <button class="quick-btn" onclick="sendQuickAction('前往图书馆')">前往图书馆</button>
+                <button class="quick-btn" onclick="sendQuickAction('前往医院')">前往医院</button>
+                <button class="quick-btn" onclick="sendQuickAction('前往灯塔')">前往灯塔</button>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="chatInput" placeholder="输入你的行动..." onkeypress="handleKeyPress(event)">
+                <button class="chat-send-btn" id="chatSendBtn" onclick="sendChatMessage()">发送</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API配置
+        const API_BASE_URL = 'http://192.168.25.137:8000';  // 改成运行后端的机器IP
+        const CHAT_API_URL = `${API_BASE_URL}/chat`;
+
+        // 游戏状态
+        let gameState = {
+            hp: 100,
+            san: 100,
+            playerName: '调查员',
+            currentLocation: '小镇入口',
+            inventory: '手电筒,笔记本,急救包',
+            isDead: false,
+            isCrazy: false
+        };
+
+        let conversationId = '';
+        let playerId = 'player-' + Date.now();
+        let isSending = false;
+
+        // ========== 开场欢迎界面 ==========
+        function startGame() {
+            const welcomeScreen = document.getElementById('welcomeScreen');
+            const gameLayout = document.getElementById('gameLayout');
+
+            welcomeScreen.classList.add('hidden');
+            setTimeout(() => {
+                welcomeScreen.style.display = 'none';
+                gameLayout.classList.add('active');
+                loadWorldState();
+                loadMessages();
+                createParticles();
+            }, 1000);
+        }
+
+        // ========== 背景粒子效果 ==========
+        function createParticles() {
+            const bg = document.getElementById('atmosphereBg');
+            for (let i = 0; i < 40; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = (Math.random() * 15 + 10) + 's';
+                particle.style.animationDelay = Math.random() * 10 + 's';
+                const size = Math.random() * 6 + 2;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                bg.appendChild(particle);
+            }
+        }
+
+        // ========== 角色状态更新 ==========
+        function updateCharacterStats(data) {
+            if (data.hp !== undefined) {
+                gameState.hp = Math.max(0, Math.min(100, data.hp));
+                const hpPercent = gameState.hp;
+                document.getElementById('hpProgress').style.width = hpPercent + '%';
+                document.getElementById('hpValue').textContent = `${gameState.hp}/100`;
+                document.getElementById('chatHpBar').style.width = hpPercent + '%';
+                document.getElementById('chatHpValue').textContent = gameState.hp;
+
+                const hpBar = document.getElementById('hpBar');
+                hpBar.classList.remove('warning', 'critical');
+                if (gameState.hp <= 20) {
+                    hpBar.classList.add('critical');
+                    showScreenEffect('death');
+                } else if (gameState.hp <= 40) {
+                    hpBar.classList.add('warning');
+                }
+            }
+
+            if (data.san !== undefined) {
+                gameState.san = Math.max(0, Math.min(100, data.san));
+                const sanPercent = gameState.san;
+                document.getElementById('sanProgress').style.width = sanPercent + '%';
+                document.getElementById('sanValue').textContent = `${gameState.san}/100`;
+                document.getElementById('chatSanBar').style.width = sanPercent + '%';
+                document.getElementById('chatSanValue').textContent = gameState.san;
+
+                const sanBar = document.getElementById('sanBar');
+                sanBar.classList.remove('warning', 'critical');
+                if (gameState.san <= 20) {
+                    sanBar.classList.add('critical');
+                    showScreenEffect('madness');
+                } else if (gameState.san <= 40) {
+                    sanBar.classList.add('warning');
+                }
+            }
+
+            if (data.playerName) {
+                gameState.playerName = data.playerName;
+                document.getElementById('playerName').textContent = data.playerName;
+            }
+            if (data.currentLocation) {
+                gameState.currentLocation = data.currentLocation;
+                document.getElementById('currentLocation').textContent = data.currentLocation;
+            }
+            if (data.inventory) {
+                gameState.inventory = data.inventory;
+                document.getElementById('inventory').textContent = data.inventory;
+            }
+
+            if (gameState.hp <= 0 && !gameState.isDead) {
+                gameState.isDead = true;
+                showScreenEffect('death');
+            }
+            if (gameState.san <= 0 && !gameState.isCrazy) {
+                gameState.isCrazy = true;
+                showScreenEffect('madness');
+            }
+        }
+
+        // ========== 屏幕特效 ==========
+        function showScreenEffect(type) {
+            const deathEffect = document.getElementById('deathEffect');
+            const madnessEffect = document.getElementById('madnessEffect');
+
+            if (type === 'death') {
+                deathEffect.classList.add('active');
+                setTimeout(() => deathEffect.classList.remove('active'), 3000);
+            } else if (type === 'madness') {
+                madnessEffect.classList.add('active');
+                setTimeout(() => madnessEffect.classList.remove('active'), 3000);
+            }
+        }
+
+        // ========== 加载世界状态 ==========
+        async function loadWorldState() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/world-state`);
+                const data = await response.json();
+
+                const atmosphereValue = document.getElementById('atmosphereValue');
+                atmosphereValue.textContent = data.atmosphere;
+
+                if (data.atmosphere > 70) {
+                    atmosphereValue.style.color = '#2ed573';
+                    document.getElementById('atmosphereDesc').textContent = '迷雾似乎淡了一些，空气中能闻到一丝海风的咸味...';
+                } else if (data.atmosphere < 30) {
+                    atmosphereValue.style.color = '#ff4757';
+                    document.getElementById('atmosphereDesc').textContent = '整个小镇笼罩在令人窒息的黑暗中，到处都是怪物的低语...';
+                } else {
+                    atmosphereValue.style.color = '#ffd93d';
+                    document.getElementById('atmosphereDesc').textContent = '迷雾笼罩着小镇，一切都显得那么诡异...';
+                }
+
+                const tasksList = document.getElementById('tasksList');
+                tasksList.innerHTML = '';
+                data.tasks.forEach(task => {
+                    const taskDiv = document.createElement('div');
+                    taskDiv.className = 'task-item';
+                    let statusClass = '';
+                    let statusText = '';
+                    if (task.status === 'pending') {
+                        statusClass = 'status-pending';
+                        statusText = '待接取';
+                    } else if (task.status === 'in_progress') {
+                        statusClass = 'status-in-progress';
+                        statusText = '进行中';
+                    } else if (task.status === 'completed') {
+                        statusClass = 'status-completed';
+                        statusText = '已完成';
+                    }
+                    taskDiv.innerHTML = `
+                        <div class="task-name">${task.name}</div>
+                        <div class="task-description">${task.description}</div>
+                        <span class="task-status ${statusClass}">${statusText}</span>
+                        ${task.player ? `<div class="task-player">玩家: ${task.player}</div>` : ''}
+                    `;
+                    tasksList.appendChild(taskDiv);
+                });
+            } catch (error) {
+                console.error('加载世界状态失败:', error);
+            }
+        }
+
+        // ========== 加载留言 ==========
+        async function loadMessages() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/world-state`);
+                const data = await response.json();
+                const messagesList = document.getElementById('messagesList');
+                messagesList.innerHTML = '';
+
+                if (data.messages.length === 0) {
+                    messagesList.innerHTML = '<p style="color: #666; text-align: center; padding: 10px; font-size: 0.8em;">暂无留言...</p>';
+                    return;
+                }
+
+                data.messages.forEach(msg => {
+                    const msgDiv = document.createElement('div');
+                    msgDiv.className = `message-item ${msg.player_status === 'dead' ? 'message-dead' : 'message-alive'}`;
+                    msgDiv.innerHTML = `
+                        <div class="message-location">${msg.location}</div>
+                        <div class="message-content">"${msg.content}"</div>
+                        <div class="message-player">— ${msg.player} ${msg.player_status === 'dead' ? '💀' : '💬'}</div>
+                    `;
+                    messagesList.appendChild(msgDiv);
+                });
+            } catch (error) {
+                console.error('加载留言失败:', error);
+            }
+        }
+
+        // ========== 聊天功能 ==========
+        function handleKeyPress(event) {
+            if (event.key === 'Enter' && !isSending) {
+                sendChatMessage();
+            }
+        }
+
+        function sendQuickAction(action) {
+            document.getElementById('chatInput').value = action;
+            sendChatMessage();
+        }
+
+        // ========== 打字机效果 ==========
+        function typewriterEffect(element, html, speed = 25) {
+            return new Promise((resolve) => {
+                element.innerHTML = '';
+                const temp = document.createElement('div');
+                temp.innerHTML = html;
+                const nodes = Array.from(temp.childNodes);
+                let nodeIdx = 0;
+
+                function processNode() {
+                    if (nodeIdx >= nodes.length) { resolve(); return; }
+                    const node = nodes[nodeIdx];
+                    if (node.nodeType === Node.TEXT_NODE) {
+                        const text = node.textContent;
+                        let charIdx = 0;
+                        const span = document.createTextNode('');
+                        element.appendChild(span);
+                        const timer = setInterval(() => {
+                            if (charIdx < text.length) {
+                                span.textContent += text.charAt(charIdx);
+                                charIdx++;
+                                scrollToBottom();
+                            } else {
+                                clearInterval(timer);
+                                nodeIdx++;
+                                processNode();
+                            }
+                        }, speed);
+                    } else {
+                        element.appendChild(node.cloneNode(true));
+                        nodeIdx++;
+                        processNode();
+                    }
+                }
+                processNode();
+            });
+        }
+
+        // ========== 消息格式化 ==========
+        function formatMessage(text) {
+            text = text.replace(/HP[:\s]*([+-]?\d+)/gi, '<span class="hp-change">HP: $1</span>');
+            text = text.replace(/SAN[:\s]*([+-]?\d+)/gi, '<span class="san-change">SAN: $1</span>');
+            text = text.replace(/检定结果[：:]\s*成功/g, '<span class="check-success">检定结果：成功</span>');
+            text = text.replace(/检定结果[：:]\s*失败/g, '<span class="check-fail">检定结果：失败</span>');
+            const locations = ['小镇入口', '图书馆', '医院', '灯塔', '教堂', '医生家'];
+            locations.forEach(loc => {
+                text = text.replace(new RegExp(loc, 'g'), `<span class="location">${loc}</span>`);
+            });
+            return text;
+        }
+
+        // ========== 发送聊天消息 ==========
+        async function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (!message || isSending) return;
+
+            addChatMessage('user', message);
+            input.value = '';
+
+            isSending = true;
+            document.getElementById('chatSendBtn').disabled = true;
+
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'chat-typing';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = 'AI正在思考 <span class="typing-dots"><span>.</span><span>.</span><span>.</span></span>';
+            document.getElementById('chatMessages').appendChild(typingDiv);
+            scrollToBottom();
+
+            try {
+                const response = await fetch(CHAT_API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        query: message,
+                        conversation_id: conversationId,
+                        user: playerId
+                    })
+                });
+
+                const data = await response.json();
+                const typing = document.getElementById('typingIndicator');
+                if (typing) typing.remove();
+
+                if (data.answer) {
+                    const formattedAnswer = formatMessage(data.answer);
+                    addChatMessage('ai', formattedAnswer, true);
+                    parseAndUpdateStats(data.answer);
+
+                    if (data.conversation_id) {
+                        conversationId = data.conversation_id;
+                    }
+                } else if (data.message) {
+                    addChatMessage('system', '错误: ' + data.message);
+                } else {
+                    addChatMessage('system', '未知错误，请重试');
+                }
+            } catch (error) {
+                console.error('Chat error:', error);
+                const typing = document.getElementById('typingIndicator');
+                if (typing) typing.remove();
+                addChatMessage('system', '网络错误，请检查连接');
+            } finally {
+                isSending = false;
+                document.getElementById('chatSendBtn').disabled = false;
+                input.focus();
+            }
+        }
+
+        // ========== 解析AI回复中的状态变化 ==========
+        function parseAndUpdateStats(text) {
+            const hpMatch = text.match(/HP[:\s]*([+-]?\d+)/i);
+            if (hpMatch) {
+                const hpChange = parseInt(hpMatch[1]);
+                if (hpChange !== 0) {
+                    updateCharacterStats({ hp: gameState.hp + hpChange });
+                }
+            }
+
+            const sanMatch = text.match(/SAN[:\s]*([+-]?\d+)/i);
+            if (sanMatch) {
+                const sanChange = parseInt(sanMatch[1]);
+                if (sanChange !== 0) {
+                    updateCharacterStats({ san: gameState.san + sanChange });
+                }
+            }
+
+            const locationMatch = text.match(/(?:前往|来到|到达|进入)[了]?[：:\s]*([^\s,，。.]+)/);
+            if (locationMatch) {
+                updateCharacterStats({ currentLocation: locationMatch[1] });
+            }
+        }
+
+        // ========== 添加聊天消息 ==========
+        function addChatMessage(type, content, isHtml = false) {
+            const messagesDiv = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message chat-message-${type}`;
+            messagesDiv.appendChild(messageDiv);
+
+            if (type === 'ai' && isHtml) {
+                typewriterEffect(messageDiv, content, 20);
+            } else if (isHtml) {
+                messageDiv.innerHTML = content;
+            } else {
+                messageDiv.textContent = content;
+            }
+            scrollToBottom();
+        }
+
+        function scrollToBottom() {
+            const messagesDiv = document.getElementById('chatMessages');
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        // ========== 页面初始化 ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            setInterval(() => {
+                if (document.getElementById('gameLayout').classList.contains('active')) {
+                    loadWorldState();
+                    loadMessages();
+                }
+            }, 30000);
+        });
+    </script>
+</body>
+</html>
