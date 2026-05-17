@@ -1,0 +1,2831 @@
+app:
+  description: ''
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: advanced-chat
+  name: 无尽幻境-wsq
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/tongyi:0.1.43@c56cb5159e37b2719559550518312773bb08e11baaf5b791cccf472d272b5438
+    version: null
+kind: app
+version: 0.6.0
+workflow:
+  conversation_variables:
+  - description: 已发现线索（留空）
+    id: a7330991-58fe-4e07-9e98-c0e82615a987
+    name: clues
+    selector:
+    - conversation
+    - clues
+    value: ''
+    value_type: string
+  - description: 当前子场景（留空）
+    id: 3b45a5d9-f048-4391-89d8-59b9716bc1b3
+    name: current_sub_location
+    selector:
+    - conversation
+    - current_sub_location
+    value: ''
+    value_type: string
+  - description: 智力 3-18
+    id: 03ed6628-b4f4-4d44-a460-ca151385da9a
+    name: intelligence
+    selector:
+    - conversation
+    - intelligence
+    value: 10
+    value_type: integer
+  - description: 体质 3-18
+    id: 44bcb181-e547-43a3-9457-28fa441880e3
+    name: con
+    selector:
+    - conversation
+    - con
+    value: 10
+    value_type: integer
+  - description: 意志 3-18
+    id: 06c2b728-72ee-4497-9d9a-bc81fe1ac2f6
+    name: pow
+    selector:
+    - conversation
+    - pow
+    value: 10
+    value_type: integer
+  - description: 敏捷 3-18
+    id: 4b2b6fc0-fc02-4766-a04c-87507e941997
+    name: dex
+    selector:
+    - conversation
+    - dex
+    value: 10
+    value_type: integer
+  - description: 力量 3-18
+    id: 61a272d2-36ec-44a1-903f-981cd00a1755
+    name: strength
+    selector:
+    - conversation
+    - strength
+    value: 10
+    value_type: integer
+  - description: 最大理智值
+    id: 282d16f8-6689-43bf-873b-bff50d7db44d
+    name: max_san
+    selector:
+    - conversation
+    - max_san
+    value: 100
+    value_type: integer
+  - description: 最大生命值
+    id: aefc932e-6968-4b16-a988-1eb598d52e1a
+    name: max_hp
+    selector:
+    - conversation
+    - max_hp
+    value: 100
+    value_type: integer
+  - description: 是否疯狂
+    id: 3e116cde-413a-4bc0-97c4-684bc67eeb31
+    name: is_crazy
+    selector:
+    - conversation
+    - is_crazy
+    value: false
+    value_type: boolean
+  - description: 是否死亡
+    id: 393ffcd5-d23e-4d7a-9762-6c225a038876
+    name: is_dead
+    selector:
+    - conversation
+    - is_dead
+    value: false
+    value_type: boolean
+  - description: 携带物品，逗号分隔
+    id: 681da1ac-b4b8-484f-bbad-61fd5d157643
+    name: inventory
+    selector:
+    - conversation
+    - inventory
+    value: 手电筒,笔记本,急救包
+    value_type: string
+  - description: 当前主场景
+    id: 54262f60-ac20-4ae7-9d18-f15b2caa13c5
+    name: current_location
+    selector:
+    - conversation
+    - current_location
+    value: 小镇入口
+    value_type: string
+  - description: 当前理智值
+    id: 7d02b2cd-9e61-4b9e-a2ea-c42ef2e8057c
+    name: san
+    selector:
+    - conversation
+    - san
+    value: 100
+    value_type: integer
+  - description: 当前生命值
+    id: 6024a1a2-79b4-47a3-9269-984391d79c34
+    name: hp
+    selector:
+    - conversation
+    - hp
+    value: 100
+    value_type: integer
+  - description: 玩家名称
+    id: 69606364-2394-4fb8-8d45-044ea376b7a3
+    name: player_name
+    selector:
+    - conversation
+    - player_name
+    value: 调查员
+    value_type: string
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        attachment_image_file_size_limit: 2
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        file_upload_limit: 20
+        image_file_batch_limit: 10
+        image_file_size_limit: 10
+        single_chunk_attachment_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: '迷雾笼罩着阿卡姆小镇，你站在小镇入口的石板路上。空气中的咸腥味告诉你——海就在不远处。你能看到远处的建筑轮廓在雾中若隐若现：一座哥特式教堂的尖顶、一座破败的灯塔、还有一栋两层木屋。脚下的石板路布满青苔，踩上去有些湿滑。
+
+
+      这座小镇藏着什么秘密？你握紧手中的手电筒，深吸一口气，踏入了迷雾之中。'
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: start
+        targetType: code
+      id: 1778836715950-source-1778836944557-target
+      selected: false
+      source: '1778836715950'
+      sourceHandle: source
+      target: '1778836944557'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: code
+        targetType: http-request
+      id: 1778836944557-source-1778837055888-target
+      selected: false
+      source: '1778836944557'
+      sourceHandle: source
+      target: '1778837055888'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: if-else
+        targetType: http-request
+      id: 1778838184166-true-1778838224516-target
+      selected: false
+      source: '1778838184166'
+      sourceHandle: 'true'
+      target: '1778838224516'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: http-request
+        targetType: code
+      id: 1778837055888-source-1778912795804-target
+      selected: false
+      source: '1778837055888'
+      sourceHandle: source
+      target: '1778912795804'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: code
+        targetType: if-else
+      id: 1778912795804-source-1778912877458-target
+      selected: false
+      source: '1778912795804'
+      sourceHandle: source
+      target: '1778912877458'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: if-else
+        targetType: if-else
+      id: 1778912877458-false-1778912941064-target
+      selected: false
+      source: '1778912877458'
+      sourceHandle: 'false'
+      target: '1778912941064'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: if-else
+        targetType: llm
+      id: 1778912877458-true-1778838045722-target
+      selected: false
+      source: '1778912877458'
+      sourceHandle: 'true'
+      target: '1778838045722'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: if-else
+        targetType: if-else
+      id: 1778912941064-false-1778913065186-target
+      selected: false
+      source: '1778912941064'
+      sourceHandle: 'false'
+      target: '1778913065186'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: if-else
+        targetType: llm
+      id: 1778912941064-true-1778913189415-target
+      selected: false
+      source: '1778912941064'
+      sourceHandle: 'true'
+      target: '1778913189415'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: if-else
+        targetType: llm
+      id: 1778913065186-true-1778913203890-target
+      selected: false
+      source: '1778913065186'
+      sourceHandle: 'true'
+      target: '1778913203890'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: if-else
+        targetType: llm
+      id: 1778913065186-false-1778913230627-target
+      selected: false
+      source: '1778913065186'
+      sourceHandle: 'false'
+      target: '1778913230627'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: code
+        targetType: if-else
+      id: 1778914691770-source-1778838184166-target
+      selected: false
+      source: '1778914691770'
+      sourceHandle: source
+      target: '1778838184166'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: variable-aggregator
+      id: 1778838045722-source-1778919013258-target
+      source: '1778838045722'
+      sourceHandle: source
+      target: '1778919013258'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: variable-aggregator
+        targetType: code
+      id: 1778919013258-source-1778914691770-target
+      source: '1778919013258'
+      sourceHandle: source
+      target: '1778914691770'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: variable-aggregator
+      id: 1778913189415-source-1778919013258-target
+      source: '1778913189415'
+      sourceHandle: source
+      target: '1778919013258'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: variable-aggregator
+      id: 1778913203890-source-1778919013258-target
+      source: '1778913203890'
+      sourceHandle: source
+      target: '1778919013258'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: variable-aggregator
+      id: 1778913230627-source-1778919013258-target
+      source: '1778913230627'
+      sourceHandle: source
+      target: '1778919013258'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: http-request
+        targetType: code
+      id: 1778838224516-source-1778919358143-target
+      source: '1778838224516'
+      sourceHandle: source
+      target: '1778919358143'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: code
+        targetType: assigner
+      id: 1778919358143-source-1778919480963-target
+      source: '1778919358143'
+      sourceHandle: source
+      target: '1778919480963'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: assigner
+        targetType: answer
+      id: 1778919480963-source-answer-target
+      source: '1778919480963'
+      sourceHandle: source
+      target: answer
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: if-else
+        targetType: code
+      id: 1778838184166-false-1778919358143-target
+      source: '1778838184166'
+      sourceHandle: 'false'
+      target: '1778919358143'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        selected: false
+        title: 用户输入
+        type: start
+        variables: []
+      height: 72
+      id: '1778836715950'
+      position:
+        x: -11.486983549970319
+        y: 96
+      positionAbsolute:
+        x: -11.486983549970319
+        y: 96
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        answer: '{{#1778914691770.story_clean#}}'
+        selected: false
+        title: 直接回复
+        type: answer
+        variables: []
+      height: 102
+      id: answer
+      position:
+        x: 5595.142857142857
+        y: 528.1428571428571
+      positionAbsolute:
+        x: 5595.142857142857
+        y: 528.1428571428571
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        code: "def main(player_name: str, hp: int, max_hp: int, san: int, max_san:\
+          \ int,\n         strength: int, dex: int, pow: int, con: int, intelligence:\
+          \ int,\n         current_location: str, current_sub_location: str,\n   \
+          \      inventory: str, clues: str,\n         is_dead: bool, is_crazy: bool)\
+          \ -> dict:\n    \"\"\"\n    将所有会话变量组合，生成角色状态文本\n    用于注入到LLM的系统提示词中\n  \
+          \  \"\"\"\n    # 构建技能值（基于属性计算）\n    # 每个技能 = 基础值 + 属性加成，上限99%\n    skills\
+          \ = {\n        \"侦察\": min(99, 25 + intelligence * 5),\n        \"聆听\":\
+          \ min(99, 20 + pow * 5),\n        \"图书馆使用\": min(99, 20 + intelligence *\
+          \ 5),\n        \"神秘学\": min(99, 5 + pow * 5),\n        \"潜行\": min(99, 20\
+          \ + dex * 5),\n        \"说服\": min(99, 15 + pow * 5),\n        \"格斗\": min(99,\
+          \ 20 + (strength + dex) * 2),\n        \"闪避\": min(99, dex * 4),\n     \
+          \   \"急救\": min(99, 10 + intelligence * 4 + dex * 2),\n        \"追踪\": min(99,\
+          \ 10 + intelligence * 4 + pow * 2),\n    }\n\n    # 构建完整角色数据对象\n    role_state\
+          \ = {\n        \"player_name\": player_name,\n        \"hp\": hp,\n    \
+          \    \"max_hp\": max_hp,\n        \"san\": san,\n        \"max_san\": max_san,\n\
+          \        \"strength\": strength,\n        \"dex\": dex,\n        \"pow\"\
+          : pow,\n        \"con\": con,\n        \"intelligence\": intelligence,\n\
+          \        \"current_location\": current_location,\n        \"current_sub_location\"\
+          : current_sub_location,\n        \"inventory\": inventory,\n        \"clues\"\
+          : clues,\n        \"is_dead\": is_dead,\n        \"is_crazy\": is_crazy,\n\
+          \        \"skills\": skills\n    }\n\n    # 计算HP/SAN状态描述（用//代替int()避免参数名int冲突）\n\
+          \    hp_pct = hp * 100 // max_hp if max_hp > 0 else 0\n    san_pct = san\
+          \ * 100 // max_san if max_san > 0 else 0\n\n    if hp_pct > 70:\n      \
+          \  hp_status = \"健康\"\n    elif hp_pct > 40:\n        hp_status = \"轻伤\"\
+          \n    elif hp_pct > 20:\n        hp_status = \"重伤\"\n    else:\n       \
+          \ hp_status = \"濒死\"\n\n    if san_pct > 70:\n        san_status = \"稳定\"\
+          \n    elif san_pct > 40:\n        san_status = \"不安\"\n    elif san_pct\
+          \ > 20:\n        san_status = \"恍惚\"\n    else:\n        san_status = \"\
+          濒临崩溃\"\n\n    # 格式化技能列表文本\n    skill_lines = \"\\n\".join([f\"  - {k}: {v}%\"\
+          \ for k, v in skills.items()])\n\n    # 子场景（如果非空）\n    sub_loc_line = f\"\
+          子场景：{current_sub_location}\" if current_sub_location else \"\"\n\n    #\
+          \ 构建最终的可读文本\n    role_state_text = f\"\"\"===== 角色状态 =====\n玩家名称：{player_name}\n\
+          ━━━━━━━━━━━━━━━━\n【生命值】HP: {hp}/{max_hp}（{hp_status}）\n【理智值】SAN: {san}/{max_san}（{san_status}）\n\
+          ━━━━━━━━━━━━━━━━\n【属性】\n  力量(STR): {strength}  敏捷(DEX): {dex}\n  意志(POW):\
+          \ {pow}  体质(CON): {con}\n  智力(INT): {intelligence}\n━━━━━━━━━━━━━━━━\n【技能】\n\
+          {skill_lines}\n━━━━━━━━━━━━━━━━\n当前位置：{current_location}\n{sub_loc_line}\n\
+          携带物品：{inventory}\n已发现线索：{clues if clues else \"无\"}\n死亡状态：{\"是\" if is_dead\
+          \ else \"否\"}\n疯狂状态：{\"是\" if is_crazy else \"否\"}\n=====================\"\
+          \"\"\n\n    return {\n        \"role_state\": role_state,\n        \"role_state_text\"\
+          : role_state_text,\n        \"current_location\": current_location\n   \
+          \ }"
+        code_language: python3
+        outputs:
+          current_location:
+            children: null
+            type: string
+          role_state:
+            children: null
+            type: object
+          role_state_text:
+            children: null
+            type: string
+        selected: false
+        title: 读取会话变量
+        type: code
+        variables:
+        - value_selector:
+          - conversation
+          - player_name
+          value_type: string
+          variable: player_name
+        - value_selector:
+          - conversation
+          - hp
+          value_type: number
+          variable: hp
+        - value_selector:
+          - conversation
+          - san
+          value_type: number
+          variable: san
+        - value_selector:
+          - conversation
+          - current_location
+          value_type: string
+          variable: current_location
+        - value_selector:
+          - conversation
+          - inventory
+          value_type: string
+          variable: inventory
+        - value_selector:
+          - conversation
+          - is_dead
+          value_type: boolean
+          variable: is_dead
+        - value_selector:
+          - conversation
+          - is_crazy
+          value_type: boolean
+          variable: is_crazy
+        - value_selector:
+          - conversation
+          - max_hp
+          value_type: number
+          variable: max_hp
+        - value_selector:
+          - conversation
+          - max_san
+          value_type: number
+          variable: max_san
+        - value_selector:
+          - conversation
+          - strength
+          value_type: number
+          variable: strength
+        - value_selector:
+          - conversation
+          - dex
+          value_type: number
+          variable: dex
+        - value_selector:
+          - conversation
+          - pow
+          value_type: number
+          variable: pow
+        - value_selector:
+          - conversation
+          - con
+          value_type: number
+          variable: con
+        - value_selector:
+          - conversation
+          - intelligence
+          value_type: number
+          variable: intelligence
+        - value_selector:
+          - conversation
+          - current_sub_location
+          value_type: string
+          variable: current_sub_location
+        - value_selector:
+          - conversation
+          - clues
+          value_type: string
+          variable: clues
+      height: 51
+      id: '1778836944557'
+      position:
+        x: 344.63901582154574
+        y: 117
+      positionAbsolute:
+        x: 344.63901582154574
+        y: 117
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        authorization:
+          config: null
+          type: no-auth
+        body:
+          data: []
+          type: none
+        headers: ''
+        method: get
+        params: ''
+        retry_config:
+          max_retries: 3
+          retry_enabled: true
+          retry_interval: 3000
+        selected: false
+        ssl_verify: true
+        timeout:
+          max_connect_timeout: 0
+          max_read_timeout: 0
+          max_write_timeout: 0
+        title: 获取世界状态
+        type: http-request
+        url: http://192.168.88.1:8000/world-state
+        variables: []
+      height: 136
+      id: '1778837055888'
+      position:
+        x: 684.7411011265922
+        y: 117
+      positionAbsolute:
+        x: 684.7411011265922
+        y: 117
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: qwen3.6-plus-2026-04-02
+          provider: langgenius/tongyi/tongyi
+        prompt_template:
+        - id: bb651c51-4c5c-47e7-a535-7b5306b18107
+          role: system
+          text: '# 角色设定
+
+
+            你是《无尽幻境》的AI游戏主持人（DM），主持一场克苏鲁风格的多人在线角色扮演游戏。你的叙事风格深受H.P.洛夫克拉夫特影响——神秘、压抑、充满未知的恐惧。
+
+
+            ## 叙事原则
+
+
+            1. **第二人称**：始终用"你"称呼当前玩家
+
+            2. **五感描写**：每段描述至少包含视觉+听觉/嗅觉/触觉中的一种
+
+            3. **氛围优先**：克苏鲁的核心是氛围而非血腥，多用"似乎""仿佛""隐约"等不确定词汇
+
+            4. **不代玩家决定**：描述环境但不替玩家做选择，留给玩家自由行动空间
+
+            5. **循序渐进**：恐怖感是逐渐积累的，而非一次性爆发
+
+
+            ---
+
+
+            # 当前游戏状态
+
+
+            ## 角色状态
+
+            {{role_state_text}}
+
+
+            ## 世界状态
+
+            {{body}}
+
+
+            ---
+
+
+            # 完整游戏规则
+
+
+            ## 一、检定系统（核心机制）
+
+
+            当玩家执行有风险的动作时，你需要进行"检定"来决定结果。
+
+
+            ### 1.1 检定规则
+
+
+            检定流程：
+
+            1. 确定使用的技能或属性
+
+            2. 计算成功率（基于技能值或属性）
+
+            3. 模拟百面骰(d100)投掷
+
+            4. 骰值 ≤ 成功率 → 成功
+
+            5. 骰值 > 成功率 → 失败
+
+            6. 骰值 ≤ 成功率的1/5 → 大成功（极好效果）
+
+            7. 骰值 = 100 或 > 成功率的95% → 大失败（灾难性后果）
+
+
+            ### 1.2 属性检定公式
+
+
+            属性值 × 5 = 基础成功率（例如STR 14 → 70%）
+
+
+            - STR 力量：推开重物、攀爬、近战伤害加成
+
+            - DEX 敏捷：闪避、潜行、平衡、先手顺序
+
+            - CON 体质：抵抗毒素/疾病、持续奔跑
+
+            - INT 智力：推理、解谜、记忆、理解复杂信息
+
+            - POW 意志：抵抗恐惧、说服他人、施展/抵抗法术
+
+
+            ### 1.3 难度修正
+
+
+            - 有利条件（工具、环境优势）：+10% 到 +30%
+
+            - 不利条件（黑暗、紧张、受伤）：-10% 到 -30%
+
+            - 极度不利（狂风暴雨、重伤）：-40% 到 -60%
+
+
+            ### 1.4 对抗检定
+
+
+            当玩家与NPC/怪物对抗时：双方各自投骰，都成功则成功率更高者胜，一方成功则成功者胜，都失败则维持现状。
+
+
+            ## 二、战斗系统
+
+
+            战斗流程：先手判定(DEX对抗) → 攻击方投格斗 → 防守方可选闪避 → 命中则投伤害 → 描述结果
+
+
+            武器伤害：
+
+            - 徒手1d3、匕首1d4+1(可投掷)、撬棍1d6(可撬门)、棍棒1d6
+
+            - 猎刀1d6+1、手枪1d8(需火器技能)、猎枪1d10(装填慢)、临时武器1d4
+
+
+            伤害规则：
+
+            - HP ≤ 0：濒死，每回合继续损失1HP
+
+            - HP ≤ -max_hp：死亡
+
+            - 同伴可在3回合内急救稳定伤势
+
+
+            大成功（骰值≤成功率/5）：战斗双倍伤害/缴械，侦察发现额外信息，说服态度大幅提升
+
+            大失败（骰值=100或>成功率95%）：战斗武器脱手/自伤，潜行制造声响，交涉激怒对方
+
+
+            ## 三、理智系统（SAN）
+
+
+            恐怖等级：
+
+            - 轻微恐怖：0/1d3（看到尸体、诡异声音）
+
+            - 中等恐怖：1/1d6（超自然现象、遭遇怪物）
+
+            - 强烈恐怖：1d3/1d10（直面神话生物、同伴惨死）
+
+            - 极致恐怖：1d6/2d10（目击不可名状之神、禁忌古籍）
+
+
+            临时疯狂（单次SAN损失≥5，投1d10）：
+
+            1-2:失忆 3-4:惊恐逃跑 5-6:暴力狂乱 7-8:幻觉 9-10:昏厥
+
+
+            SAN恢复：安全休息1d6、解谜推进1d3、镇静剂1d6、同伴安慰1d3、逃离危险1d3
+
+
+            ## 四、NPC交互规则
+
+
+            NPC态度：友好→愿意帮助、中立→需说服、敌意→可能攻击、疯狂→不可预测
+
+
+            交涉：普通谈话无需检定，获取重要信息投【说服】，讨价还价困难难度，恐吓STR对抗
+
+
+            ## 五、道具系统
+
+
+            - 急救包：HP+2d10（医院、商店）
+
+            - 镇静剂：SAN+1d6（医院、药店）
+
+            - 手电筒：黑暗探索（起始）
+
+            - 绳索：攀爬捆绑（码头）
+
+            - 古老地图：发现隐藏路径（图书馆）
+
+
+            ## 六、线索系统
+
+
+            - ★☆☆ 普通线索：容易发现，基础信息
+
+            - ★★☆ 重要线索：需成功检定，推进主线
+
+            - ★★★ 关键线索：隐藏极深，核心真相
+
+
+            ## 七、行动类型处理
+
+
+            - 观察/环顾：自动成功，描述环境
+
+            - 搜索/检查：投【侦察】
+
+            - 倾听/偷听：投【聆听】
+
+            - 查阅资料：投【图书馆使用】
+
+            - 推理/分析：投INT×5
+
+            - 追踪：投【追踪】
+
+            - 进入子场景：自动成功，切换到对应描述
+
+
+            ## 八、输出格式（严格遵守）
+
+
+            每次回复必须严格按照以下格式输出，【】标记必须完整，JSON必须可解析：
+
+
+            【检定结果】：[技能/属性名] [成功/失败]（骰值X，需求≤Y）
+
+
+            【状态变化】：HP: [+/-数字], SAN: [+/-数字]  （⚠️ 必须写实际数字如 -5，不能写骰子表达式如 -2d10）
+
+
+            【数据更新】：[JSON]  （可选，没有变化就写 null）
+
+
+            【剧情】：
+
+            [第一段：感官描写 - 你看到了/听到了/感受到了什么]
+
+            [第二段：细节展开 - 环境细节和潜在威胁]
+
+            [第三段：行动提示 - 以"你可以..."结尾，给玩家1-3个可选方向]
+
+
+            【世界更新】：[JSON]
+
+
+            完整输出示例：
+
+            【检定结果】：侦察 成功（骰值34，需求≤65）
+
+            【状态变化】：HP: -5, SAN: -3
+
+            【数据更新】：{"location": "教堂", "sub_location": "大门厅", "inventory": "手电筒,笔记本,生锈钥匙",
+            "clues": "泛黄纸条"}
+
+            【剧情】：
+
+            [第一段：感官描写]
+
+            [第二段：细节展开]
+
+            [第三段：行动提示]
+
+            【世界更新】：{"need_update": false}
+
+
+            - 【数据更新】必须在【剧情】之前，不能放在末尾！
+
+            - 没有变化时写： 【数据更新】：null
+
+            - inventory和clues必须写完整列表（不是增量）
+
+
+            世界更新JSON格式：
+
+            需要更新时：{"need_update": true, "action": "complete_task", "task_id": "task_001",
+            "player": "玩家名", "atmosphere_change": 10, "message": {"location": "图书馆",
+            "content": "留言", "player": "玩家名", "player_status": "alive"}}
+
+            不需要更新时：{"need_update": false}
+
+
+            数据更新JSON格式（可选，所有字段可为null，null=不修改）：
+
+            {"location": "新地点名", "sub_location": "新子场景", "inventory": "完整背包用逗号分隔",
+            "clues": "完整线索用逗号分隔"}
+
+
+            > ⚠️ inventory和clues必须写**完整列表**（不是增量），基于角色状态中的当前值追加或移除后再输出
+
+
+            ## 九、行为约束（严格执行）
+
+
+            1. ❌ 不代玩家行动 — 永远不要替玩家做决定或描述他们的反应
+
+            2. ❌ 不预设结果 — 不要预设玩家行动的结果，让检定决定
+
+            3. ❌ 不杀死玩家（非检定）— 只有检定失败才能导致伤害/死亡
+
+            4. ✅ 公正裁决 — 根据规则进行检定，不偏袒
+
+            5. ✅ 环境先行 — 先描述环境，让玩家自己选择行动
+
+            6. ✅ 循序渐进 — 逐步揭示信息，不要一次性给出全部真相
+
+            7. ✅ 多人兼容 — 始终考虑其他玩家的存在和世界状态的连续性
+
+            8. ✅ 鼓励角色扮演 — 奖励有创意的解决方案和符合角色设定的行动
+
+
+            ## 十、主线线索链
+
+
+            线索链：迷雾起源
+
+            1. [图书馆] 查阅地方志 → 发现小镇百年前发生过类似事件
+
+            2. [教堂] 与神父交谈 → 得知"深海教会"的存在
+
+            3. [医生家] 找到医生日记 → 记载了仪式细节
+
+            4. [灯塔] 点亮灯塔 → 暂时驱散迷雾
+
+            5. [矿洞] 探索矿坑 → 发现地下祭坛
+
+            6. [祭坛] 摧毁或封印 → 解决迷雾根源
+
+
+            触发世界更新的情况：接受/完成任务、角色死亡、氛围值变化、重大剧情节点
+
+
+            ---
+
+
+            # 【区域专用】城镇区 — 小镇入口/教堂/图书馆/医生家
+
+
+            ## 区域主题
+
+
+            日常中的诡异、小镇秘密、知识追寻。这是玩家最安全的区域，NPC密集，是获取信息和任务的主要场所。
+
+
+            ## 当前地点详细信息
+
+
+            根据玩家当前的 current_location 和 current_sub_location 选择对应子场景：
+
+
+            ### 小镇入口
+
+
+            #### 入口石板路
+
+            青苔覆盖的古老石板路，两侧歪斜的木质路灯。雾气在石板表面流动。
+
+            - 可互动：检查松动石板、观察两侧
+
+            - ★★☆ 线索：一块石板下方有铁盒，内有一张泛黄纸条
+
+
+            #### 废弃木屋
+
+            倾斜的木结构房屋，窗户破碎，门板半开。檐下破碎风铃在无风中摇晃。
+
+            - 可互动：屋内残留家具、壁炉灰烬
+
+            - ★☆☆ 线索：壁炉砖块后有铁盒，内有半张照片和一封信
+
+
+            #### 古井
+
+            古老石砌水井，井口布满青苔。木制辘轳仍可使用。
+
+            - 可互动：放下木桶打水、检查井口
+
+            - ★★☆ 线索：井壁侧面2米处有暗格，内有防水笔记本
+
+
+            #### 公告栏
+
+            破旧木制公告栏，褪色纸张碎片微微颤动。
+
+            - 可互动：查看残留告示
+
+            - ★☆☆ 线索：告示背面有铅笔写的潦草警告
+
+
+            ### 教堂
+
+
+            #### 大门厅
+
+            高耸哥特式大厅，两排木质长椅，彩色玻璃窗大部分破碎。圣坛银质十字架歪斜。空气中弥漫香火味和灰尘气息。光线透过破碎彩窗投下斑斓残缺的光影。
+
+            - 可互动：检查长椅雕刻、圣坛物品
+
+            - ★☆☆ 线索：圣坛布幔下有近期脚印
+
+
+            #### 钟楼
+
+            狭窄石制旋转楼梯盘旋而上，顶部悬挂巨大铜钟，表面布满铜绿。可俯瞰整个小镇和灰色海面。风大。
+
+            - 可互动：检查铜钟表面刻字、俯瞰小镇
+
+            - ★★☆ 线索：钟绳上端刻有拉丁文小字—似乎是祷文或警告
+
+
+            #### 忏悔室
+
+            大厅侧面两个相连小隔间，木制栅栏隔窗。内部极其狭窄，只有木制跪垫。
+
+            - 可互动：检查跪垫、检查隔窗
+
+            - ★★☆ 线索：左侧跪垫下有松动木板，内有凹槽藏着一把生锈钥匙
+
+
+            #### 神父办公室
+
+            教堂后侧小房间，橡木书桌靠窗，满墙书架，壁炉灰烬已冷。墙上木质十字架雕刻精细。
+
+            - 可互动：书桌抽屉、书架书籍、壁炉
+
+            - ★★★ 线索：壁炉内侧有松动砖块，取出后暗格内有神父密信，记载了他对"深海教会"的恐惧和调查笔记
+
+
+            #### 地下室
+
+            圣坛后方暗门下石阶。潮湿石阶长满青苔。底部拱顶石室堆着旧木桶、空酒瓶和废弃宗教器具。
+
+            - 可互动：检查木桶和旧物
+
+            - ★★☆ 线索：东墙回声异常——墙后有空间，是通往地下墓穴的密道
+
+
+            #### 此区域NPC
+
+            神父安东尼 — 友好。位于教堂大厅或办公室。提供小镇历史和疗愈。隐藏着关于深海教会的秘密。
+
+
+            ### 图书馆
+
+
+            #### 大厅阅览区
+
+            高耸到天花板的橡木书架，中央长桌被多年阅读磨得光滑。铜制煤油吊灯投下暖黄色光晕。空气中弥漫旧纸和尘埃的味道。
+
+            - 可互动：翻阅架上书籍、检查桌上报纸和笔记
+
+            - ★☆☆ 线索：散落的借阅记录纸片
+
+
+            #### 古籍区
+
+            最深处独立区域，玻璃门隔开，铜锁加锁。柜中古老皮装书和羊皮卷轴。
+
+            - 可互动：需钥匙或撬锁进入
+
+            - ★★★ 线索：柜中最下层有被藏起的《深海教会仪式手稿》——核心线索之一
+
+
+            #### 管理员办公室
+
+            大厅侧面小房间，堆满文件。书桌上高高文件堆和老式打字机。文件柜靠在墙角。
+
+            - 可互动：查阅借阅记录、翻找文件堆
+
+            - ★★☆ 线索：文件堆中有借阅记录显示医生在失踪前频繁借阅深海地质学书籍
+
+
+            #### 地下书库
+
+            后楼梯下的低矮拱顶空间。铁质书架排列密集如迷宫。霉味和纸张腐朽气息浓重。
+
+            - 可互动：翻找角落书堆
+
+            - ★★☆ 线索：某本书外壳伪装成书，内藏刻满符号的铜钥匙
+
+
+            #### 此区域NPC
+
+            图书管理员艾琳 — 中立→友好。位于借阅台或办公室。帮助她后她会告知禁书区秘密。
+
+
+            ### 医生家
+
+
+            #### 客厅
+
+            家具覆薄灰，茶几上烟灰缸和半杯已蒸发干的威士忌。壁炉残留木炭。摆钟停在凌晨3:15。
+
+            - 可互动：茶几物品、壁炉上相框
+
+            - ★☆☆ 线索：相框背后有日期和地点标注
+
+
+            #### 诊室
+
+            白布检查床，玻璃医疗柜整齐摆放药品和器械。洗手台白瓷表面有茶色污渍。
+
+            - 可互动：医疗柜药品（有镇静剂和止痛药）、检查床下
+
+            - ★★☆ 线索：洗手台下排水管用胶带粘着防水油布包，内有几页撕下的日记
+
+
+            #### 书房
+
+            二楼朝南房间，大书桌对窗，文具整齐。档案柜带铜锁。墙上医学证书和海景画。
+
+            - 可互动：书桌抽屉（中间上锁）、档案柜
+
+            - ★★★ 线索：学历证书后有暗格，内有医生完整调查日记——记录了小镇迷雾真相和"灯塔的秘密"
+
+
+            #### 卧室
+
+            四柱床，床头柜煤油灯和翻开的书。衣柜门半开，床单被褥凌乱。
+
+            - 可互动：床头柜抽屉、衣柜
+
+            - ★★☆ 线索：床板下用胶带贴着医生手绘的灯塔结构图，标注了隐藏空间'
+        - id: eb89a28c-e114-4495-824e-54cccbc1baf5
+          role: user
+          text: '用户输入：{{#sys.query#}}
+
+
+            角色状态：{{#1778836944557.role_state_text#}}
+
+
+            世界状态：{{#1778837055888.body#}}'
+        selected: false
+        title: LLM — 城镇区主持人
+        type: llm
+        vision:
+          enabled: false
+      height: 87
+      id: '1778838045722'
+      position:
+        x: 2204.4762731818587
+        y: 94.92880901273799
+      positionAbsolute:
+        x: 2204.4762731818587
+        y: 94.92880901273799
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        cases:
+        - case_id: 'true'
+          conditions:
+          - comparison_operator: is
+            id: 2fabdc0f-a29b-40d3-8902-e26afcd07d20
+            value: true
+            varType: boolean
+            variable_selector:
+            - '1778914691770'
+            - need_update
+          id: 'true'
+          logical_operator: and
+        selected: false
+        title: 条件分支
+        type: if-else
+      height: 123
+      id: '1778838184166'
+      position:
+        x: 3993.935525816857
+        y: 366.13517450023437
+      positionAbsolute:
+        x: 3993.935525816857
+        y: 366.13517450023437
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        authorization:
+          config: null
+          type: no-auth
+        body:
+          data:
+          - id: key-value-1069
+            key: ''
+            type: text
+            value: '{{#1778914691770.world_json_str#}}'
+          type: raw-text
+        headers: Content-Type:application/json
+        method: post
+        params: ''
+        retry_config:
+          max_retries: 3
+          retry_enabled: true
+          retry_interval: 3089
+        selected: false
+        ssl_verify: false
+        timeout:
+          max_connect_timeout: 0
+          max_read_timeout: 0
+          max_write_timeout: 0
+        title: 更新世界状态
+        type: http-request
+        url: http://192.168.88.1:8000/update-world
+        variables: []
+      height: 136
+      id: '1778838224516'
+      position:
+        x: 4403.571428571428
+        y: 226.8571428571429
+      positionAbsolute:
+        x: 4403.571428571428
+        y: 226.8571428571429
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        code: "def main(current_location: str) -> dict:\n    \"\"\"\n    根据玩家当前位置，判断所属区域\n\
+          \    返回 region 供 IF/ELSE 路由\n    \"\"\"\n    # 城镇区 - 安全区域，起始地点，NPC密集\n \
+          \   town_locations = [\"小镇入口\", \"教堂\", \"图书馆\", \"医生家\"]\n\n    # 海滨区 -\
+          \ 靠海区域，神秘气息\n    coastal_locations = [\"灯塔\", \"码头\", \"灯塔密室\"]\n\n    #\
+          \ 禁区 - 危险区域，恐怖事件频发\n    dark_locations = [\"医院\", \"矿洞\", \"地下墓穴\"]\n\n\
+          \    # 判断当前地点在哪个区域\n    if current_location in town_locations:\n       \
+          \ region = \"town\"\n    elif current_location in coastal_locations:\n \
+          \       region = \"coastal\"\n    elif current_location in dark_locations:\n\
+          \        region = \"dark\"\n    else:\n        # 不在任何预设区域中，使用通用LLM兜底\n \
+          \       region = \"general\"\n\n    return {\"region\": region}"
+        code_language: python3
+        outputs:
+          region:
+            children: null
+            type: string
+        selected: false
+        title: 路由器
+        type: code
+        variables:
+        - value_selector:
+          - '1778836944557'
+          - current_location
+          value_type: string
+          variable: current_location
+      height: 51
+      id: '1778912795804'
+      position:
+        x: 1026.297396709994
+        y: 117
+      positionAbsolute:
+        x: 1026.297396709994
+        y: 117
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        cases:
+        - case_id: 'true'
+          conditions:
+          - comparison_operator: is
+            id: 19d9632a-69b0-48b1-9bef-b778363669a4
+            value: town
+            varType: string
+            variable_selector:
+            - '1778912795804'
+            - region
+          id: 'true'
+          logical_operator: and
+        selected: false
+        title: 路由→城镇区
+        type: if-else
+      height: 123
+      id: '1778912877458'
+      position:
+        x: 1365
+        y: 81
+      positionAbsolute:
+        x: 1365
+        y: 81
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        cases:
+        - case_id: 'true'
+          conditions:
+          - comparison_operator: is
+            id: 89d13250-2254-48d8-8004-b6dcb4a0d2e6
+            value: coastal
+            varType: string
+            variable_selector:
+            - '1778912795804'
+            - region
+          id: 'true'
+          logical_operator: and
+        selected: false
+        title: 路由→海滨区
+        type: if-else
+      height: 123
+      id: '1778912941064'
+      position:
+        x: 1604.1428571428573
+        y: 334.42857142857144
+      positionAbsolute:
+        x: 1604.1428571428573
+        y: 334.42857142857144
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        cases:
+        - case_id: 'true'
+          conditions:
+          - comparison_operator: contains
+            id: b57bc230-64e5-4f81-9b1b-0830d7842cf6
+            value: dark
+            varType: string
+            variable_selector:
+            - '1778912795804'
+            - region
+          id: 'true'
+          logical_operator: and
+        selected: false
+        title: 路由→禁区
+        type: if-else
+      height: 123
+      id: '1778913065186'
+      position:
+        x: 1843.7332713819346
+        y: 623.3037496166965
+      positionAbsolute:
+        x: 1843.7332713819346
+        y: 623.3037496166965
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: qwen3.6-flash-2026-04-16
+          provider: langgenius/tongyi/tongyi
+        prompt_template:
+        - id: 441981dc-7a93-4109-b55f-5cdb7e9ec003
+          role: system
+          text: '# 角色设定
+
+
+            你是《无尽幻境》的AI游戏主持人（DM），主持一场克苏鲁风格的多人在线角色扮演游戏。你的叙事风格深受H.P.洛夫克拉夫特影响——神秘、压抑、充满未知的恐惧。
+
+
+            ## 叙事原则
+
+
+            1. **第二人称**：始终用"你"称呼当前玩家
+
+            2. **五感描写**：每段描述至少包含视觉+听觉/嗅觉/触觉中的一种
+
+            3. **氛围优先**：克苏鲁的核心是氛围而非血腥，多用"似乎""仿佛""隐约"等不确定词汇
+
+            4. **不代玩家决定**：描述环境但不替玩家做选择，留给玩家自由行动空间
+
+            5. **循序渐进**：恐怖感是逐渐积累的，而非一次性爆发
+
+
+            ---
+
+
+            # 当前游戏状态
+
+
+            ## 角色状态
+
+            {{role_state_text}}
+
+
+            ## 世界状态
+
+            {{body}}
+
+
+            ---
+
+
+            # 完整游戏规则
+
+
+            ## 一、检定系统（核心机制）
+
+
+            当玩家执行有风险的动作时，你需要进行"检定"来决定结果。
+
+
+            ### 1.1 检定规则
+
+
+            检定流程：
+
+            1. 确定使用的技能或属性
+
+            2. 计算成功率（基于技能值或属性）
+
+            3. 模拟百面骰(d100)投掷
+
+            4. 骰值 ≤ 成功率 → 成功
+
+            5. 骰值 > 成功率 → 失败
+
+            6. 骰值 ≤ 成功率的1/5 → 大成功（极好效果）
+
+            7. 骰值 = 100 或 > 成功率的95% → 大失败（灾难性后果）
+
+
+            ### 1.2 属性检定公式
+
+
+            属性值 × 5 = 基础成功率（例如STR 14 → 70%）
+
+
+            - STR 力量：推开重物、攀爬、近战伤害加成
+
+            - DEX 敏捷：闪避、潜行、平衡、先手顺序
+
+            - CON 体质：抵抗毒素/疾病、持续奔跑
+
+            - INT 智力：推理、解谜、记忆、理解复杂信息
+
+            - POW 意志：抵抗恐惧、说服他人、施展/抵抗法术
+
+
+            ### 1.3 难度修正
+
+
+            - 有利条件（工具、环境优势）：+10% 到 +30%
+
+            - 不利条件（黑暗、紧张、受伤）：-10% 到 -30%
+
+            - 极度不利（狂风暴雨、重伤）：-40% 到 -60%
+
+
+            ### 1.4 对抗检定
+
+
+            当玩家与NPC/怪物对抗时：双方各自投骰，都成功则成功率更高者胜，一方成功则成功者胜，都失败则维持现状。
+
+
+            ## 二、战斗系统
+
+
+            战斗流程：先手判定(DEX对抗) → 攻击方投格斗 → 防守方可选闪避 → 命中则投伤害 → 描述结果
+
+
+            武器伤害：
+
+            - 徒手1d3、匕首1d4+1(可投掷)、撬棍1d6(可撬门)、棍棒1d6
+
+            - 猎刀1d6+1、手枪1d8(需火器技能)、猎枪1d10(装填慢)、临时武器1d4
+
+
+            伤害规则：
+
+            - HP ≤ 0：濒死，每回合继续损失1HP
+
+            - HP ≤ -max_hp：死亡
+
+            - 同伴可在3回合内急救稳定伤势
+
+
+            大成功（骰值≤成功率/5）：战斗双倍伤害/缴械，侦察发现额外信息，说服态度大幅提升
+
+            大失败（骰值=100或>成功率95%）：战斗武器脱手/自伤，潜行制造声响，交涉激怒对方
+
+
+            ## 三、理智系统（SAN）
+
+
+            恐怖等级：
+
+            - 轻微恐怖：0/1d3（看到尸体、诡异声音）
+
+            - 中等恐怖：1/1d6（超自然现象、遭遇怪物）
+
+            - 强烈恐怖：1d3/1d10（直面神话生物、同伴惨死）
+
+            - 极致恐怖：1d6/2d10（目击不可名状之神、禁忌古籍）
+
+
+            临时疯狂（单次SAN损失≥5，投1d10）：
+
+            1-2:失忆 3-4:惊恐逃跑 5-6:暴力狂乱 7-8:幻觉 9-10:昏厥
+
+
+            SAN恢复：安全休息1d6、解谜推进1d3、镇静剂1d6、同伴安慰1d3、逃离危险1d3
+
+
+            ## 四、NPC交互规则
+
+
+            NPC态度：友好→愿意帮助、中立→需说服、敌意→可能攻击、疯狂→不可预测
+
+
+            交涉：普通谈话无需检定，获取重要信息投【说服】，讨价还价困难难度，恐吓STR对抗
+
+
+            ## 五、道具系统
+
+
+            - 急救包：HP+2d10（医院、商店）
+
+            - 镇静剂：SAN+1d6（医院、药店）
+
+            - 手电筒：黑暗探索（起始）
+
+            - 绳索：攀爬捆绑（码头）
+
+            - 古老地图：发现隐藏路径（图书馆）
+
+
+            ## 六、线索系统
+
+
+            - ★☆☆ 普通线索：容易发现，基础信息
+
+            - ★★☆ 重要线索：需成功检定，推进主线
+
+            - ★★★ 关键线索：隐藏极深，核心真相
+
+
+            ## 七、行动类型处理
+
+
+            - 观察/环顾：自动成功，描述环境
+
+            - 搜索/检查：投【侦察】
+
+            - 倾听/偷听：投【聆听】
+
+            - 查阅资料：投【图书馆使用】
+
+            - 推理/分析：投INT×5
+
+            - 追踪：投【追踪】
+
+            - 进入子场景：自动成功，切换到对应描述
+
+
+            ## 八、输出格式（严格遵守）
+
+
+            每次回复必须严格按照以下格式输出，【】标记必须完整，JSON必须可解析：
+
+
+            【检定结果】：[技能/属性名] [成功/失败]（骰值X，需求≤Y）
+
+
+            【状态变化】：HP: [+/-数字], SAN: [+/-数字]  （⚠️ 必须写实际数字如 -5，不能写骰子表达式如 -2d10）
+
+
+            【数据更新】：[JSON]  （可选，没有变化就写 null）
+
+
+            【剧情】：
+
+            [第一段：感官描写 - 你看到了/听到了/感受到了什么]
+
+            [第二段：细节展开 - 环境细节和潜在威胁]
+
+            [第三段：行动提示 - 以"你可以..."结尾，给玩家1-3个可选方向]
+
+
+            【世界更新】：[JSON]
+
+
+            世界更新JSON格式：
+
+            需要更新时：{"need_update": true, "action": "complete_task", "task_id": "task_001",
+            "player": "玩家名", "atmosphere_change": 10, "message": {"location": "灯塔",
+            "content": "留言", "player": "玩家名", "player_status": "alive"}}
+
+            不需要更新时：{"need_update": false}
+
+
+            数据更新JSON格式（可选，所有字段可为null，null=不修改）：
+
+            {"location": "新地点名", "sub_location": "新子场景", "inventory": "完整背包用逗号分隔",
+            "clues": "完整线索用逗号分隔"}
+
+
+            > ⚠️ inventory和clues必须写**完整列表**（不是增量），基于角色状态中的当前值追加或移除后再输出
+
+
+            ## 九、行为约束（严格执行）
+
+
+            1. ❌ 不代玩家行动 — 永远不要替玩家做决定或描述他们的反应
+
+            2. ❌ 不预设结果 — 不要预设玩家行动的结果，让检定决定
+
+            3. ❌ 不杀死玩家（非检定）— 只有检定失败才能导致伤害/死亡
+
+            4. ✅ 公正裁决 — 根据规则进行检定，不偏袒
+
+            5. ✅ 环境先行 — 先描述环境，让玩家自己选择行动
+
+            6. ✅ 循序渐进 — 逐步揭示信息，不要一次性给出全部真相
+
+            7. ✅ 多人兼容 — 始终考虑其他玩家的存在和世界状态的连续性
+
+            8. ✅ 鼓励角色扮演 — 奖励有创意的解决方案和符合角色设定的行动
+
+
+            ## 十、主线线索链
+
+
+            线索链：迷雾起源
+
+            1. [图书馆] 查阅地方志 → 发现小镇百年前发生过类似事件
+
+            2. [教堂] 与神父交谈 → 得知"深海教会"的存在
+
+            3. [医生家] 找到医生日记 → 记载了仪式细节
+
+            4. [灯塔] 点亮灯塔 → 暂时驱散迷雾
+
+            5. [矿洞] 探索矿坑 → 发现地下祭坛
+
+            6. [祭坛] 摧毁或封印 → 解决迷雾根源
+
+
+            触发世界更新的情况：接受/完成任务、角色死亡、氛围值变化、重大剧情节点
+
+
+            ---
+
+
+            # 【区域专用】海滨区 — 灯塔/码头/灯塔密室
+
+
+            ## 区域主题
+
+
+            海洋深处的秘密、孤立与疯狂、古老信仰。临海区域，海雾弥漫，隐藏着小镇最深的秘密。
+
+
+            ## 当前地点详细信息
+
+
+            根据玩家当前的 current_location 和 current_sub_location 选择对应子场景：
+
+
+            ### 灯塔
+
+
+            #### 塔底入口
+
+            灯塔底部沉重橡木门，铁质门环锈迹斑斑。门厅挂着破旧航海用具——油灯、罗盘、航海图。海风中夹杂着铁锈味。
+
+            - 可互动：检查航海用具、墙上航海图
+
+            - ★☆☆ 线索：航海图上有铅笔标注的坐标，其中一个位置被圈出
+
+
+            #### 螺旋楼梯
+
+            沿塔壁盘旋的石质楼梯狭窄陡峭。每隔一段有窄窗透进苍白天光。窗台积着厚厚灰尘和海盐结晶。越往上风声越大。
+
+            - 可互动：检查窗台、墙壁痕迹
+
+            - ★★☆ 线索：一级台阶磨损异常，侧面有暗格，内藏刻有符号的怀表
+
+
+            #### 灯室
+
+            塔顶八角形房间，中央巨大铜制多面透镜在微光中反射幽暗金色光芒。墙角堆着煤油罐。透过玻璃窗可看全镇和灰色大海。
+
+            - 可互动：检查透镜机械、灯油罐
+
+            - ★★☆ 线索：灯座基座刻着文字——灯塔最初建造目的不仅是导航，还有"监视海面下某种存在"
+
+
+            #### 灯塔密室
+
+            塔底下方的圆形石室，通过地板暗门进入（暗门被松动地砖覆盖）。墙壁画满符号和图案。中央简陋石制祭坛上摆放风化蜡烛残骸和骨片。这个空间比灯塔本身更古老。
+
+            - 可互动：检查祭坛、墙壁符号、地面痕迹
+
+            - ★★★ 线索：祭坛下方有暗格，内有防水布包裹的古书——记载了"深海教会"完整教义和仪式
+
+            - ⚠️ 强制SAN损失：进入损失0/1d3 SAN
+
+
+            #### 此区域NPC
+
+            老船长莫里斯 — 中立。偶尔在灯塔或码头出现。提供海雾起源和灯塔历史。他是镇上唯一敢谈论"深海教会"的人。
+
+
+            ### 码头
+
+
+            #### 木制栈桥
+
+            延伸入海的木制结构，木板吱吱作响，部分腐烂断裂露出黑色海水。系船柱缠绕腐烂绳索。海水拍打木桩声有节奏回荡。海风带着浓重鱼腥味。
+
+            - 可互动：检查栈桥尽头、系船柱
+
+            - ★★☆ 线索：近尽头处有新钉痕迹的木板下，防水油布包裹着几封未寄出的信
+
+
+            #### 废弃渔船
+
+            搁浅在栈桥旁，船体倾斜，木板缝隙长出海藻和藤壶。甲板散落渔网和空木箱。船舱入口半掩一片漆黑。
+
+            - 可互动：甲板物品、船舱内搜索
+
+            - ★★☆ 线索：船舱地板下的暗格藏有航海日志，最后记录日期是迷雾出现那天，提到"海中的光"
+
+
+            #### 仓库
+
+            铁皮屋顶大型建筑，大门虚掩但未锁。内部堆满木箱、绳缆、油桶和废弃工具。几束光线透过高窗照亮漂浮尘埃。
+
+            - 可互动：翻找货物堆、检查工具箱
+
+            - ★★☆ 线索：货物堆后有隐蔽隔间，放着深海贝壳制成的符号和盐渍长袍
+
+
+            #### 渔夫小屋
+
+            栈桥起点处破旧木屋，烟囱倒塌一半。屋内简陋：木板床、铁炉、摇晃桌子。墙上挂着晒干渔网。
+
+            - 可互动：检查炉灶、床铺、桌子抽屉
+
+            - ★☆☆ 线索：抽屉里有照片——渔夫和神父的合影，背面写着"最后的好运"
+
+
+            #### 此区域NPC
+
+            流浪汉杰克 — 中立。在码头仓库附近游荡。曾为渔夫，提供关于"水中的影子"的目击证言。
+
+
+            ### 灯塔密室
+
+
+            独立区域，已在灯塔子场景中详细描述。'
+        - id: 63f609f1-9033-4259-b661-1a3a3f0127a8
+          role: user
+          text: '用户输入：{{#sys.query#}}
+
+
+            当前人物状态：{{#1778836944557.role_state_text#}}
+
+
+            当前世界状态：{{#1778837055888.body#}}'
+        selected: true
+        title: LLM-海滨区主持人
+        type: llm
+        vision:
+          enabled: false
+      height: 87
+      id: '1778913189415'
+      position:
+        x: 2204.4762731818587
+        y: 366.13517450023437
+      positionAbsolute:
+        x: 2204.4762731818587
+        y: 366.13517450023437
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: qwen3.5-plus-2026-02-15
+          provider: langgenius/tongyi/tongyi
+        prompt_template:
+        - id: 2bad42de-6556-48ec-b082-149a87c11c42
+          role: system
+          text: '# 角色设定
+
+
+            你是《无尽幻境》的AI游戏主持人（DM），主持一场克苏鲁风格的多人在线角色扮演游戏。你的叙事风格深受H.P.洛夫克拉夫特影响——神秘、压抑、充满未知的恐惧。
+
+
+            ## 叙事原则
+
+
+            1. **第二人称**：始终用"你"称呼当前玩家
+
+            2. **五感描写**：每段描述至少包含视觉+听觉/嗅觉/触觉中的一种
+
+            3. **氛围优先**：克苏鲁的核心是氛围而非血腥，多用"似乎""仿佛""隐约"等不确定词汇
+
+            4. **不代玩家决定**：描述环境但不替玩家做选择，留给玩家自由行动空间
+
+            5. **循序渐进**：恐怖感是逐渐积累的，而非一次性爆发
+
+
+            ---
+
+
+            # 当前游戏状态
+
+
+            ## 角色状态
+
+            {{role_state_text}}
+
+
+            ## 世界状态
+
+            {{body}}
+
+
+            ---
+
+
+            # 完整游戏规则
+
+
+            ## 一、检定系统（核心机制）
+
+
+            当玩家执行有风险的动作时，你需要进行"检定"来决定结果。
+
+
+            ### 1.1 检定规则
+
+
+            检定流程：
+
+            1. 确定使用的技能或属性
+
+            2. 计算成功率（基于技能值或属性）
+
+            3. 模拟百面骰(d100)投掷
+
+            4. 骰值 ≤ 成功率 → 成功
+
+            5. 骰值 > 成功率 → 失败
+
+            6. 骰值 ≤ 成功率的1/5 → 大成功（极好效果）
+
+            7. 骰值 = 100 或 > 成功率的95% → 大失败（灾难性后果）
+
+
+            ### 1.2 属性检定公式
+
+
+            属性值 × 5 = 基础成功率（例如STR 14 → 70%）
+
+
+            - STR 力量：推开重物、攀爬、近战伤害加成
+
+            - DEX 敏捷：闪避、潜行、平衡、先手顺序
+
+            - CON 体质：抵抗毒素/疾病、持续奔跑
+
+            - INT 智力：推理、解谜、记忆、理解复杂信息
+
+            - POW 意志：抵抗恐惧、说服他人、施展/抵抗法术
+
+
+            ### 1.3 难度修正
+
+
+            - 有利条件（工具、环境优势）：+10% 到 +30%
+
+            - 不利条件（黑暗、紧张、受伤）：-10% 到 -30%
+
+            - 极度不利（狂风暴雨、重伤）：-40% 到 -60%
+
+
+            ### 1.4 对抗检定
+
+
+            当玩家与NPC/怪物对抗时：双方各自投骰，都成功则成功率更高者胜，一方成功则成功者胜，都失败则维持现状。
+
+
+            ## 二、战斗系统
+
+
+            战斗流程：先手判定(DEX对抗) → 攻击方投格斗 → 防守方可选闪避 → 命中则投伤害 → 描述结果
+
+
+            武器伤害：
+
+            - 徒手1d3、匕首1d4+1(可投掷)、撬棍1d6(可撬门)、棍棒1d6
+
+            - 猎刀1d6+1、手枪1d8(需火器技能)、猎枪1d10(装填慢)、临时武器1d4
+
+
+            伤害规则：
+
+            - HP ≤ 0：濒死，每回合继续损失1HP
+
+            - HP ≤ -max_hp：死亡
+
+            - 同伴可在3回合内急救稳定伤势
+
+
+            大成功（骰值≤成功率/5）：战斗双倍伤害/缴械，侦察发现额外信息，说服态度大幅提升
+
+            大失败（骰值=100或>成功率95%）：战斗武器脱手/自伤，潜行制造声响，交涉激怒对方
+
+
+            ## 三、理智系统（SAN）
+
+
+            恐怖等级：
+
+            - 轻微恐怖：0/1d3（看到尸体、诡异声音）
+
+            - 中等恐怖：1/1d6（超自然现象、遭遇怪物）
+
+            - 强烈恐怖：1d3/1d10（直面神话生物、同伴惨死）
+
+            - 极致恐怖：1d6/2d10（目击不可名状之神、禁忌古籍）
+
+
+            临时疯狂（单次SAN损失≥5，投1d10）：
+
+            1-2:失忆 3-4:惊恐逃跑 5-6:暴力狂乱 7-8:幻觉 9-10:昏厥
+
+
+            SAN恢复：安全休息1d6、解谜推进1d3、镇静剂1d6、同伴安慰1d3、逃离危险1d3
+
+
+            ## 四、NPC交互规则
+
+
+            NPC态度：友好→愿意帮助、中立→需说服、敌意→可能攻击、疯狂→不可预测
+
+
+            交涉：普通谈话无需检定，获取重要信息投【说服】，讨价还价困难难度，恐吓STR对抗
+
+
+            ## 五、道具系统
+
+
+            - 急救包：HP+2d10（医院、商店）
+
+            - 镇静剂：SAN+1d6（医院、药店）
+
+            - 手电筒：黑暗探索（起始）
+
+            - 绳索：攀爬捆绑（码头）
+
+            - 古老地图：发现隐藏路径（图书馆）
+
+
+            ## 六、线索系统
+
+
+            - ★☆☆ 普通线索：容易发现，基础信息
+
+            - ★★☆ 重要线索：需成功检定，推进主线
+
+            - ★★★ 关键线索：隐藏极深，核心真相
+
+
+            ## 七、行动类型处理
+
+
+            - 观察/环顾：自动成功，描述环境
+
+            - 搜索/检查：投【侦察】
+
+            - 倾听/偷听：投【聆听】
+
+            - 查阅资料：投【图书馆使用】
+
+            - 推理/分析：投INT×5
+
+            - 追踪：投【追踪】
+
+            - 进入子场景：自动成功，切换到对应描述
+
+
+            ## 八、输出格式（严格遵守）
+
+
+            每次回复必须严格按照以下格式输出，【】标记必须完整，JSON必须可解析：
+
+
+            【检定结果】：[技能/属性名] [成功/失败]（骰值X，需求≤Y）
+
+
+            【状态变化】：HP: [+/-数字], SAN: [+/-数字]  （⚠️ 必须写实际数字如 -5，不能写骰子表达式如 -2d10）
+
+
+            【数据更新】：[JSON]  （可选，没有变化就写 null）
+
+
+            【剧情】：
+
+            [第一段：感官描写 - 你看到了/听到了/感受到了什么]
+
+            [第二段：细节展开 - 环境细节和潜在威胁]
+
+            [第三段：行动提示 - 以"你可以..."结尾，给玩家1-3个可选方向]
+
+
+            【世界更新】：[JSON]
+
+
+            世界更新JSON格式：
+
+            需要更新时：{"need_update": true, "action": "complete_task", "task_id": "task_001",
+            "player": "玩家名", "atmosphere_change": 10, "message": {"location": "医院",
+            "content": "留言", "player": "玩家名", "player_status": "alive"}}
+
+            不需要更新时：{"need_update": false}
+
+
+            数据更新JSON格式（可选，所有字段可为null，null=不修改）：
+
+            {"location": "新地点名", "sub_location": "新子场景", "inventory": "完整背包用逗号分隔",
+            "clues": "完整线索用逗号分隔"}
+
+
+            > ⚠️ inventory和clues必须写**完整列表**（不是增量），基于角色状态中的当前值追加或移除后再输出
+
+
+            ## 九、行为约束（严格执行）
+
+
+            1. ❌ 不代玩家行动 — 永远不要替玩家做决定或描述他们的反应
+
+            2. ❌ 不预设结果 — 不要预设玩家行动的结果，让检定决定
+
+            3. ❌ 不杀死玩家（非检定）— 只有检定失败才能导致伤害/死亡
+
+            4. ✅ 公正裁决 — 根据规则进行检定，不偏袒
+
+            5. ✅ 环境先行 — 先描述环境，让玩家自己选择行动
+
+            6. ✅ 循序渐进 — 逐步揭示信息，不要一次性给出全部真相
+
+            7. ✅ 多人兼容 — 始终考虑其他玩家的存在和世界状态的连续性
+
+            8. ✅ 鼓励角色扮演 — 奖励有创意的解决方案和符合角色设定的行动
+
+
+            ## 十、主线线索链
+
+
+            线索链：迷雾起源
+
+            1. [图书馆] 查阅地方志 → 发现小镇百年前发生过类似事件
+
+            2. [教堂] 与神父交谈 → 得知"深海教会"的存在
+
+            3. [医生家] 找到医生日记 → 记载了仪式细节
+
+            4. [灯塔] 点亮灯塔 → 暂时驱散迷雾
+
+            5. [矿洞] 探索矿坑 → 发现地下祭坛
+
+            6. [祭坛] 摧毁或封印 → 解决迷雾根源
+
+
+            触发世界更新的情况：接受/完成任务、角色死亡、氛围值变化、重大剧情节点
+
+
+            ---
+
+
+            # 【区域专用】禁区 — 医院/矿洞/地下墓穴
+
+
+            ## 区域主题
+
+
+            疯狂与畸变、深埋的秘密、不可名状的恐怖。高危险区域，SAN值损失风险极高，存在战斗威胁。
+
+
+            ## 当前地点详细信息
+
+
+            根据玩家当前的 current_location 和 current_sub_location 选择对应子场景：
+
+
+            ### 医院
+
+
+            #### 大厅/接待处
+
+            破碎玻璃旋转门倒在入口，踩上去咯吱作响。天花板日光灯管大部分熄灭，仅剩几根微弱闪烁发出嗡嗡声。前台散落病历和登记本。候诊区一把椅子上搭着发霉衣物。空气中有消毒水和甜腻腐败味。
+
+            - 可互动：病历架上的病历、候诊区物品
+
+            - ★★☆ 线索：一份标记病历，患者名模糊，诊断栏"幻觉伴妄想"但备注"不是幻觉"
+
+
+            #### 病房区
+
+            长长走廊两侧排列病床。床单泛黄有暗色污渍。走廊尽头有滴水声。
+
+            - 可互动：进入病房检查、床头柜物品
+
+            - ★★☆ 线索：某病床金属床架下刻着字："它们在井里，不是井里，是海里"
+
+            - ⚠️ 危险：有概率遭遇"畸变体"（HP30，格斗40%，伤害1d4+1，SAN损失1/1d4）
+
+
+            #### 手术室
+
+            手术台上方无影灯仍可使用。器械托盘散落手术刀和钳子。药品柜玻璃门半开。
+
+            - 可互动：手术器械（可作武器1d6）、药品柜
+
+            - ★★☆ 线索：镇静剂一瓶（SAN恢复1d6）和一瓶标签被撕去的药水
+
+            - ★★★ 线索：通风管道口有撬动痕迹，内有塑料袋包裹的临床记录——多名患者声称"听到来自地下的低语"
+
+
+            #### 停尸房
+
+            地下室尽头。不锈钢冷藏柜拉手结着薄霜。不锈钢解剖台排水槽有深色污渍。瓷砖墙壁在冷光灯下泛惨白。
+
+            - 可互动：打开冷藏柜查看、检查解剖台
+
+            - ★★☆ 线索：一个柜中有身份不明尸体，手腕有"深海教会"符号纹身
+
+            - ⚠️ 强制SAN损失：进入损失0/1d3 SAN
+
+
+            #### 院长办公室
+
+            三楼尽头，皮质办公椅、大书桌、书架。保险柜藏在书架后。桌上打字机和空相框。
+
+            - 可互动：书桌抽屉（上锁）、保险柜（需密码）、书架
+
+            - ★★★ 线索：保险柜密码线索——书架《白鲸》书中夹着纸条"1915.3.15"
+
+            - 保险柜内：录音带、现金、通往地下通道的钥匙
+
+
+            #### 此区域敌人
+
+            畸变体 — HP30，格斗40%，伤害1d4+1（爪击），SAN损失1/1d4。可能出现在病房区。
+
+
+            ### 矿洞
+
+
+            #### 矿道入口
+
+            山丘脚下木制支撑架，铁轨从洞内延伸出。废弃矿车侧翻在轨道旁。洞内吹出的风带着潮湿泥土味和金属味。
+
+            - 可互动：检查矿车、入口周围
+
+            - ★☆☆ 线索：入口岩壁上有刻痕标记
+
+
+            #### 主矿道
+
+            深入山体的通道，地面铺铁轨。壁上有火把架。头顶岩壁渗水珠。脚步声在通道中回荡仿佛有人同行。
+
+            - 可互动：点燃火把照明、检查矿脉
+
+            - ★★☆ 线索：某处岩壁后有裂隙通道——风声穿过证明后面是空的，可用工具撬开
+
+
+            #### 开采区
+
+            宽阔洞穴空间，散落镐、铲子和矿石堆。几辆矿车停在铁轨上。尽头有三个岔路口。洞顶很高看不清。
+
+            - 可互动：开采工具（镐可作武器1d8）、矿石堆
+
+            - ★★☆ 线索：矿石堆中有黑色闪亮结晶，触摸有微温（神秘学检定可识别）
+
+            - ⚠️ 危险：可能触发矿道塌陷（DEX检定躲避）
+
+
+            #### 地下祭坛
+
+            最深处天然洞穴，足有半个篮球场大。中央黑色石制祭坛，表面刻满符号。周围蜡烛残渣和暗色污渍。洞壁壁画描绘不可名状生物从海中升起。
+
+            - 可互动：检查祭坛、解读壁画
+
+            - ★★★ 线索：祭坛东侧基座有活动石板，下方有"封印仪式"步骤的石板
+
+            - ⚠️ 强制SAN损失：进入损失1/1d6 SAN
+
+            - ⚠️ 可能遭遇"地下生物"（HP50，格斗50%，伤害1d6+2）
+
+
+            ### 地下墓穴
+
+
+            入口：从教堂地下室密道进入
+
+
+            #### 墓穴入口
+
+            拱形石门刻拉丁文铭文。门沉重需STR≥10推开。门两侧火把架。
+
+            - 可互动：阅读铭文（神秘学可翻译）
+
+            - ★★☆ 线索：外侧"回头吧，此处非生者之地"→内侧"但真相在死者之中"
+
+
+            #### 主走廊
+
+            两侧壁龛整齐排列坐姿人类骸骨，穿着腐朽衣物，仿佛注视每个经过者。走廊长且暗。空气干燥寒冷带着陶土味。
+
+            - 可互动：检查骸骨饰品
+
+            - ★★☆ 线索：一具骸骨戴银质吊坠，内有微缩照片和基督教会之外的符号
+
+
+            #### 主墓室
+
+            圆形穹顶约15米直径。穹顶彩色壁画描绘古老仪式。中央石棺，地面绘制法阵。四根石柱支撑。
+
+            - 可互动：检查壁画、打开石棺
+
+            - ★★★ 线索：棺内骸骨旁有皮面笔记本——19世纪神父调查发现教堂下方有更古老遗迹
+
+            - ⚠️ 强制SAN损失：进入损失0/1d3 SAN
+
+
+            #### 密室
+
+            主墓室侧面隐蔽小房间，需按顺序旋转四根石柱上符号打开。内有石制书架和黑色多触手神像。
+
+            - 可互动：阅读古籍、检查神像
+
+            - ★★★ 线索：古籍记载"深海教会"真正起源和目的——揭密关键
+
+            - ★★☆ 注意：神像底座下有"封印之印"（封印祭坛的关键道具）
+
+            - ⚠️ 强制SAN损失：目击神像损失1/1d6 SAN'
+        - id: 560e3667-4392-4a0b-924c-e6629a5de2fa
+          role: user
+          text: '用户输入：{{#sys.query#}}
+
+
+            当前人物状态：{{#1778836944557.role_state_text#}}
+
+
+            当前世界状态：{{#1778837055888.body#}}'
+        selected: false
+        title: LLM-禁区主持人
+        type: llm
+        vision:
+          enabled: false
+      height: 87
+      id: '1778913203890'
+      position:
+        x: 2204.4762731818587
+        y: 658.3102859516315
+      positionAbsolute:
+        x: 2204.4762731818587
+        y: 658.3102859516315
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: qwen3.6-flash
+          provider: langgenius/tongyi/tongyi
+        prompt_template:
+        - id: 5f5b2084-9536-4bb2-88fb-0e7367519497
+          role: system
+          text: '# 【区域专用】通用区域（兜底）
+
+
+            当前玩家所在位置 "{{current_location}}" 不属于预设区域。
+
+
+            请根据以下原则处理：
+
+            1. 根据上下文和世界状态合理描述当前环境
+
+            2. 保持克苏鲁风格的一致性和游戏规则的连贯性
+
+            3. 如果玩家进入了未定义的区域，创造性地补充合理的环境描述
+
+            4. 适时引导玩家返回已知区域（教堂、图书馆、灯塔、医院等）'
+        - id: 2f205d2c-2b7e-4c6a-a2b2-a5a9aa743687
+          role: user
+          text: '用户输入：{{#sys.query#}}
+
+
+            当前人物状态：{{#1778836944557.role_state_text#}}
+
+
+            当前世界状态：{{#1778837055888.body#}}'
+        selected: false
+        title: LLM-通用主持人
+        type: llm
+        vision:
+          enabled: false
+      height: 87
+      id: '1778913230627'
+      position:
+        x: 2204.4762731818587
+        y: 868.5937221277942
+      positionAbsolute:
+        x: 2204.4762731818587
+        y: 868.5937221277942
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        code: "import re\nimport json\nimport random as _r\n\n\ndef main(llm_output:\
+          \ str) -> dict:\n    \"\"\"\n    解析LLM输出，提取状态变化和世界更新信息\n    \"\"\"\n   \
+          \ # ---- 空值保护 ----\n    if not isinstance(llm_output, str):\n        llm_output\
+          \ = \"\"\n\n    # ---- 默认值 ----\n    hp_change = 0\n    san_change = 0\n\
+          \    need_update = False\n    world_json = {}\n\n    # ---- 1. 解析【状态变化】行\
+          \ ----\n    status_match = re.search(\n        r'【状态变化】[：:]\\s*(.*?)(?=\\\
+          n【|\\n$|$)',\n        llm_output,\n        re.DOTALL\n    )\n    if status_match:\n\
+          \        status_line = status_match.group(1).strip()\n        \n       \
+          \ # 提取HP变化（支持数字或骰子表达式）\n        hp_raw = re.search(r'HP:\\s*([+-]?(?:\\\
+          d+|(\\d+)d(\\d+)))', status_line)\n        if hp_raw:\n            hp_str\
+          \ = hp_raw.group(1)\n            if 'd' in hp_str:\n                n, m\
+          \ = int(hp_raw.group(2)), int(hp_raw.group(3))\n                hp_change\
+          \ = sum(_r.randint(1, m) for _ in range(n))\n                if hp_str.startswith('-'):\n\
+          \                    hp_change = -hp_change\n            else:\n       \
+          \         hp_change = int(hp_str)\n        \n        # 提取SAN变化\n       \
+          \ san_raw = re.search(r'SAN:\\s*([+-]?(?:\\d+|(\\d+)d(\\d+)))', status_line)\n\
+          \        if san_raw:\n            san_str = san_raw.group(1)\n         \
+          \   if 'd' in san_str:\n                n, m = int(san_raw.group(2)), int(san_raw.group(3))\n\
+          \                san_change = sum(_r.randint(1, m) for _ in range(n))\n\
+          \                if san_str.startswith('-'):\n                    san_change\
+          \ = -san_change\n            else:\n                san_change = int(san_str)\n\
+          \n    # ---- 2. 解析【世界更新】JSON ----\n    world_match = re.search(\n      \
+          \  r'【世界更新】[：:]\\s*(\\{.*)',\n        llm_output,\n        re.DOTALL\n \
+          \   )\n    if world_match:\n        raw_json_str = world_match.group(1)\n\
+          \        depth = 0\n        end_pos = 0\n        for i, ch in enumerate(raw_json_str):\n\
+          \            if ch == '{':\n                depth += 1\n            elif\
+          \ ch == '}':\n                depth -= 1\n                if depth == 0:\n\
+          \                    end_pos = i + 1\n                    break\n      \
+          \  if end_pos > 0:\n            try:\n                world_json = json.loads(raw_json_str[:end_pos])\n\
+          \                if world_json.get(\"need_update\"):\n                 \
+          \   need_update = True\n            except json.JSONDecodeError:\n     \
+          \           world_json = {}\n\n    # ---- 3. 从world_json提取字段 ----\n    world_action\
+          \ = world_json.get(\"action\", \"\")\n    world_task_id = world_json.get(\"\
+          task_id\", \"\")\n    world_player = world_json.get(\"player\", \"\")\n\
+          \    world_atmosphere_change = world_json.get(\"atmosphere_change\", 0)\n\
+          \    msg = world_json.get(\"message\", {})\n    if isinstance(msg, dict):\n\
+          \        world_msg_location = msg.get(\"location\", \"\")\n        world_msg_content\
+          \ = msg.get(\"content\", \"\")\n        world_msg_player = msg.get(\"player\"\
+          , \"\")\n        world_msg_player_status = msg.get(\"player_status\", \"\
+          \")\n    else:\n        world_msg_location = \"\"\n        world_msg_content\
+          \ = \"\"\n        world_msg_player = \"\"\n        world_msg_player_status\
+          \ = \"\"\n\n    # ---- 4. 解析【数据更新】JSON（物品/位置/线索变化） ----\n    data_location\
+          \ = \"\"\n    data_sub_location = \"\"\n    data_inventory = \"\"\n    data_clues\
+          \ = \"\"\n    data_raw_str = \"\"\n    data_match = re.search(\n       \
+          \ r'【数据更新】[：:]\\s*(\\{.*)',\n        llm_output,\n        re.DOTALL\n  \
+          \  )\n    if data_match:\n        raw_data_str = data_match.group(1)\n \
+          \       depth = 0\n        end_pos = 0\n        for i, ch in enumerate(raw_data_str):\n\
+          \            if ch == '{':\n                depth += 1\n            elif\
+          \ ch == '}':\n                depth -= 1\n                if depth == 0:\n\
+          \                    end_pos = i + 1\n                    break\n      \
+          \  if end_pos > 0:\n            data_raw_str = raw_data_str[:end_pos]\n\
+          \            try:\n                data_json = json.loads(data_raw_str)\n\
+          \                data_location = data_json.get(\"location\") or \"\"\n \
+          \               data_sub_location = data_json.get(\"sub_location\") or \"\
+          \"\n                data_inventory = data_json.get(\"inventory\") or \"\"\
+          \n                data_clues = data_json.get(\"clues\") or \"\"\n      \
+          \      except json.JSONDecodeError:\n                pass\n\n    # ----\
+          \ 4b. 兜底：如果没找到【数据更新】标签，尝试从末尾提取JSON ----\n    if not data_raw_str:\n    \
+          \    end_json_match = re.search(r'\\n(\\{.*\\})\\s*$', llm_output, re.DOTALL)\n\
+          \        if end_json_match:\n            try:\n                fallback_json\
+          \ = json.loads(end_json_match.group(1))\n                if any(k in fallback_json\
+          \ for k in (\"location\", \"sub_location\", \"inventory\", \"clues\")):\n\
+          \                    data_location = fallback_json.get(\"location\") or\
+          \ \"\"\n                    data_sub_location = fallback_json.get(\"sub_location\"\
+          ) or \"\"\n                    data_inventory = fallback_json.get(\"inventory\"\
+          ) or \"\"\n                    data_clues = fallback_json.get(\"clues\"\
+          ) or \"\"\n                    data_raw_str = end_json_match.group(1)\n\
+          \            except json.JSONDecodeError:\n                pass\n\n    #\
+          \ ---- 5. 校验action是否合法 ----\n    VALID_ACTIONS = [\"update_atmosphere\"\
+          , \"accept_task\", \"complete_task\", \"add_message\"]\n    if world_action\
+          \ and world_action not in VALID_ACTIONS:\n        need_update = False\n\
+          \        world_action = \"\"\n        world_json = {}\n\n    # ---- 5. 用自己的字段重新构建干净JSON\
+          \ ----\n    clean_json = {\"need_update\": need_update}\n    if world_action:\n\
+          \        clean_json[\"action\"] = world_action\n    if world_task_id:\n\
+          \        clean_json[\"task_id\"] = world_task_id\n    if world_player:\n\
+          \        clean_json[\"player\"] = world_player\n    if world_atmosphere_change:\n\
+          \        clean_json[\"atmosphere_change\"] = world_atmosphere_change\n \
+          \   if world_msg_location or world_msg_content or world_msg_player:\n  \
+          \      clean_json[\"message\"] = {\n            \"location\": world_msg_location,\n\
+          \            \"content\": world_msg_content,\n            \"player\": world_msg_player,\n\
+          \            \"player_status\": world_msg_player_status,\n        }\n  \
+          \  world_json_str = json.dumps(clean_json)\n\n    # ---- 6. 从story_clean中去掉【数据更新】/【世界更新】/末尾裸JSON\
+          \ ----\n    story_clean = re.sub(\n        r'\\n?【(?:数据更新|世界更新)】[：:]\\s*\\\
+          {.*?\\}\\n?',\n        '',\n        llm_output,\n        flags=re.DOTALL\n\
+          \    ).strip()\n    if data_raw_str:\n        story_clean = story_clean.replace(data_raw_str,\
+          \ \"\").strip()\n\n    # ---- 7. 返回解析结果 ----\n    return {\n        \"hp_change\"\
+          : hp_change,\n        \"san_change\": san_change,\n        \"need_update\"\
+          : need_update,\n        \"world_json\": world_json,\n        \"world_json_str\"\
+          : world_json_str,\n        \"world_action\": world_action,\n        \"world_task_id\"\
+          : world_task_id,\n        \"world_player\": world_player,\n        \"world_atmosphere_change\"\
+          : world_atmosphere_change,\n        \"world_msg_location\": world_msg_location,\n\
+          \        \"world_msg_content\": world_msg_content,\n        \"world_msg_player\"\
+          : world_msg_player,\n        \"world_msg_player_status\": world_msg_player_status,\n\
+          \        \"data_location\": data_location,\n        \"data_sub_location\"\
+          : data_sub_location,\n        \"data_inventory\": data_inventory,\n    \
+          \    \"data_clues\": data_clues,\n        \"story_clean\": story_clean\n\
+          \    }\n"
+        code_language: python3
+        outputs:
+          data_clues:
+            children: null
+            type: string
+          data_inventory:
+            children: null
+            type: string
+          data_location:
+            children: null
+            type: string
+          data_sub_location:
+            children: null
+            type: string
+          hp_change:
+            children: null
+            type: number
+          need_update:
+            children: null
+            type: boolean
+          san_change:
+            children: null
+            type: number
+          story_clean:
+            children: null
+            type: string
+          world_action:
+            children: null
+            type: string
+          world_atmosphere_change:
+            children: null
+            type: number
+          world_json:
+            children: null
+            type: object
+          world_json_str:
+            children: null
+            type: string
+          world_msg_content:
+            children: null
+            type: string
+          world_msg_location:
+            children: null
+            type: string
+          world_msg_player:
+            children: null
+            type: string
+          world_msg_player_status:
+            children: null
+            type: string
+          world_player:
+            children: null
+            type: string
+          world_task_id:
+            children: null
+            type: string
+        selected: false
+        title: 解析游戏输出
+        type: code
+        variables:
+        - value_selector:
+          - '1778919013258'
+          - output
+          value_type: string
+          variable: llm_output
+      height: 51
+      id: '1778914691770'
+      position:
+        x: 3346.7951255184225
+        y: 319.0252007348896
+      positionAbsolute:
+        x: 3346.7951255184225
+        y: 319.0252007348896
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        output_type: string
+        selected: false
+        title: 变量聚合器
+        type: variable-aggregator
+        variables:
+        - - '1778913189415'
+          - text
+        - - '1778913230627'
+          - text
+        - - '1778913203890'
+          - text
+        - - '1778838045722'
+          - text
+      height: 185
+      id: '1778919013258'
+      position:
+        x: 2839.2296433142856
+        y: 324.36056382214394
+      positionAbsolute:
+        x: 2839.2296433142856
+        y: 324.36056382214394
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        code: "def main(hp: int, san: int, hp_change: int, san_change: int,\n    \
+          \     current_location: str, current_sub_location: str,\n         current_inventory:\
+          \ str, current_clues: str,\n         data_location: str, data_sub_location:\
+          \ str,\n         data_inventory: str, data_clues: str) -> dict:\n    \"\"\
+          \"\n    计算新的角色状态，合并数据更新\n    data_xxx 来自LLM的【数据更新】，为空字符串=不修改\n    \"\"\"\
+          \n    # ---- HP/SAN计算 ----\n    new_hp = max(0, min(100, hp + hp_change))\n\
+          \    new_san = max(0, min(100, san + san_change))\n    is_dead = new_hp\
+          \ <= 0\n    is_crazy = new_san <= 0\n\n    # ---- 数据合并：位置/物品/线索 ----\n \
+          \   # LLM在【数据更新】中输出的是完整值（非增量），\n    # 有值就用LLM的，空字符串=不修改\n    new_location\
+          \ = data_location if data_location else current_location\n    new_sub_location\
+          \ = data_sub_location if data_sub_location else current_sub_location\n \
+          \   new_inventory = data_inventory if data_inventory else current_inventory\n\
+          \    new_clues = data_clues if data_clues else current_clues\n\n    return\
+          \ {\n        \"new_hp\": new_hp,\n        \"new_san\": new_san,\n      \
+          \  \"is_dead\": is_dead,\n        \"is_crazy\": is_crazy,\n        \"new_location\"\
+          : new_location,\n        \"new_sub_location\": new_sub_location,\n     \
+          \   \"new_inventory\": new_inventory,\n        \"new_clues\": new_clues,\n\
+          \    }"
+        code_language: python3
+        outputs:
+          is_crazy:
+            children: null
+            type: boolean
+          is_dead:
+            children: null
+            type: boolean
+          new_clues:
+            children: null
+            type: string
+          new_hp:
+            children: null
+            type: number
+          new_inventory:
+            children: null
+            type: string
+          new_location:
+            children: null
+            type: string
+          new_san:
+            children: null
+            type: number
+          new_sub_location:
+            children: null
+            type: string
+        selected: false
+        title: 计算角色状态
+        type: code
+        variables:
+        - value_selector:
+          - conversation
+          - hp
+          value_type: number
+          variable: hp
+        - value_selector:
+          - conversation
+          - san
+          value_type: number
+          variable: san
+        - value_selector:
+          - '1778914691770'
+          - hp_change
+          value_type: number
+          variable: hp_change
+        - value_selector:
+          - '1778914691770'
+          - san_change
+          value_type: number
+          variable: san_change
+        - value_selector:
+          - conversation
+          - current_location
+          value_type: string
+          variable: current_location
+        - value_selector:
+          - conversation
+          - current_sub_location
+          value_type: string
+          variable: current_sub_location
+        - value_selector:
+          - conversation
+          - inventory
+          value_type: string
+          variable: current_inventory
+        - value_selector:
+          - conversation
+          - clues
+          value_type: string
+          variable: current_clues
+        - value_selector:
+          - '1778914691770'
+          - data_location
+          value_type: string
+          variable: data_location
+        - value_selector:
+          - '1778914691770'
+          - data_inventory
+          value_type: string
+          variable: data_inventory
+        - value_selector:
+          - '1778914691770'
+          - data_clues
+          value_type: string
+          variable: data_clues
+        - value_selector:
+          - '1778914691770'
+          - data_sub_location
+          value_type: string
+          variable: data_sub_location
+      height: 51
+      id: '1778919358143'
+      position:
+        x: 4765.266324340306
+        y: 552.6917822622629
+      positionAbsolute:
+        x: 4765.266324340306
+        y: 552.6917822622629
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        items:
+        - input_type: variable
+          operation: over-write
+          value:
+          - '1778919358143'
+          - new_hp
+          variable_selector:
+          - conversation
+          - hp
+          write_mode: over-write
+        - input_type: variable
+          operation: over-write
+          value:
+          - '1778919358143'
+          - new_san
+          variable_selector:
+          - conversation
+          - san
+          write_mode: over-write
+        - input_type: variable
+          operation: over-write
+          value:
+          - '1778919358143'
+          - is_dead
+          variable_selector:
+          - conversation
+          - is_dead
+          write_mode: over-write
+        - input_type: variable
+          operation: over-write
+          value:
+          - '1778919358143'
+          - is_crazy
+          variable_selector:
+          - conversation
+          - is_crazy
+          write_mode: over-write
+        - input_type: variable
+          operation: over-write
+          value:
+          - '1778919358143'
+          - new_location
+          variable_selector:
+          - conversation
+          - current_location
+          write_mode: over-write
+        - input_type: variable
+          operation: over-write
+          value:
+          - '1778919358143'
+          - new_sub_location
+          variable_selector:
+          - conversation
+          - current_sub_location
+          write_mode: over-write
+        - input_type: variable
+          operation: over-write
+          value:
+          - '1778919358143'
+          - new_inventory
+          variable_selector:
+          - conversation
+          - inventory
+          write_mode: over-write
+        - input_type: variable
+          operation: over-write
+          value:
+          - '1778919358143'
+          - new_clues
+          variable_selector:
+          - conversation
+          - clues
+          write_mode: over-write
+        selected: false
+        title: 更新角色状态
+        type: assigner
+        version: '2'
+      height: 265
+      id: '1778919480963'
+      position:
+        x: 5067.266324340306
+        y: 552.6917822622629
+      positionAbsolute:
+        x: 5067.266324340306
+        y: 552.6917822622629
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    viewport:
+      x: 217.1429320523103
+      y: 274.86015783300195
+      zoom: 0.43527528164806273
+  rag_pipeline_variables: []
