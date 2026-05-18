@@ -83,11 +83,10 @@ python frontend/server.py
 ├── frontend/                 # 前端页面
 │   ├── index.html            # 游戏界面
 │   ├── server.py             # 前端 HTTP 服务器
-│   └── 背景图.png             # 聊天背景
+│   └── welcome.jpg           # 欢迎界面背景图
 ├── dify/                     # Dify Chatflow 配置
 │   ├── chatflow配置说明.md    # 详细搭建指南
 │   └── chatflow节点详细设置.md # 节点配置手册
-└── image/                    # 图片资源
 ```
 
 ---

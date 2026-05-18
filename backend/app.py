@@ -21,7 +21,7 @@ import time
 import os
 
 # Dify API 配置
-DIFY_API_KEY = os.getenv("DIFY_API_KEY", "app-1mZQGieaKyx8bY1i18G7REp0")
+DIFY_API_KEY = os.getenv("DIFY_API_KEY", "app-1x1dyM7bxjnUCuRwWmRtVpDa")
 DIFY_API_URL = os.getenv("DIFY_API_URL", "http://192.168.88.100/v1/chat-messages")
 
 # ============================================================
@@ -191,6 +191,32 @@ class AddMessageRequest(BaseModel):
     player_status: str = "alive"
 
 
+class RegisterPlayerRequest(BaseModel):
+    name: str
+    hp: int = 100
+    max_hp: int = 100
+    san: int = 100
+    max_san: int = 100
+    current_location: str = "小镇入口"
+    inventory: str = "手电筒,笔记本,急救包"
+
+
+class PvpAttackRequest(BaseModel):
+    attacker: str
+    target: str
+    damage: int = 0
+
+
+class UpdatePlayerStateRequest(BaseModel):
+    name: str
+    hp: int = None
+    san: int = None
+    current_location: str = None
+    inventory: str = None
+    is_dead: bool = None
+    is_crazy: bool = None
+
+
 # ============================================================
 # API 路由
 # ============================================================
@@ -202,9 +228,13 @@ def root():
 
 @app.get("/world-state")
 def get_world_state():
-    """获取完整世界状态（带缓存）"""
+    """获取完整世界状态（带缓存 + 在线人数氛围加成）"""
     try:
         state = _get_cached_world_state()
+        # 在线人数氛围加成：每多一个玩家氛围 +0.1
+        online_bonus = len(state.get("players", [])) * 0.1
+        state["atmosphere_bonus"] = round(online_bonus, 1)
+        state["atmosphere"] = round(state["atmosphere"] + online_bonus, 1)
         return state
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -212,10 +242,11 @@ def get_world_state():
 
 @app.get("/atmosphere")
 def get_atmosphere():
-    """获取当前氛围值"""
+    """获取当前氛围值（含在线人数加成）"""
     try:
         state = _get_cached_world_state()
-        return {"atmosphere": state["atmosphere"]}
+        online_bonus = len(state.get("players", [])) * 0.1
+        return {"atmosphere": round(state["atmosphere"] + online_bonus, 1)}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -380,6 +411,92 @@ async def update_world(request: Request):
 
 
 # ============================================================
+# PvP 玩家接口
+# ============================================================
+
+@app.post("/register-player")
+def register_player(request: RegisterPlayerRequest):
+    """注册/上线玩家"""
+    try:
+        result = db.register_player(
+            request.name, request.hp, request.max_hp,
+            request.san, request.max_san,
+            request.current_location, request.inventory
+        )
+        _invalidate_cache()
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/players")
+def get_players():
+    """获取在线玩家列表"""
+    try:
+        players = db.get_online_players()
+        return {"players": players}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/pvp-attack")
+def pvp_attack(request: PvpAttackRequest):
+    """PvP攻击（直接扣减HP，由AI判定后调用）"""
+    try:
+        # 自攻击检查
+        if request.attacker == request.target:
+            raise HTTPException(status_code=400, detail="不能攻击自己")
+
+        # 查询双方状态
+        attacker = db.get_player(request.attacker)
+        target = db.get_player(request.target)
+        if not attacker:
+            raise HTTPException(status_code=404, detail="攻击者不存在")
+        if not target:
+            raise HTTPException(status_code=404, detail="目标不存在")
+        if attacker.get("is_dead"):
+            raise HTTPException(status_code=400, detail="死亡状态无法攻击")
+        if target.get("is_dead"):
+            raise HTTPException(status_code=400, detail="目标已死亡")
+        if attacker.get("current_location") != target.get("current_location"):
+            raise HTTPException(status_code=400, detail="不在同一位置，无法攻击")
+
+        # 扣减HP
+        result = db.update_player_hp(request.target, -request.damage)
+        if not result.get("success"):
+            raise HTTPException(status_code=500, detail=result.get("message", "攻击失败"))
+
+        _invalidate_cache()
+        return {
+            "success": True,
+            "attacker": request.attacker,
+            "target": request.target,
+            "damage": request.damage,
+            "target_new_hp": result["new_hp"],
+            "target_dead": result["is_dead"]
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/update-player-state")
+def update_player_state(request: UpdatePlayerStateRequest):
+    """通用玩家状态同步"""
+    try:
+        result = db.update_player_state(
+            request.name, request.hp, request.san,
+            request.current_location, request.inventory,
+            request.is_dead, request.is_crazy
+        )
+        _invalidate_cache()
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ============================================================
 # Dify 代理
 # ============================================================
 
@@ -433,11 +550,79 @@ def _dify_streaming_request(payload: dict) -> dict:
     return {"answer": full_answer, "conversation_id": conversation_id}
 
 
+def _sync_player_from_answer(player_name, answer_text):
+    """从Dify回复中解析状态变化，同步到players表并处理PvP"""
+    if not player_name or not answer_text:
+        return
+
+    import re as _re
+
+    # 解析【状态变化】中的HP/SAN变化
+    hp_change = 0
+    san_change = 0
+    status_match = _re.search(r'【状态变化】[：:]\s*(.*?)(?=\n【|\n$|$)', answer_text, _re.DOTALL)
+    if status_match:
+        status_line = status_match.group(1).strip()
+        hp_match = _re.search(r'HP:\s*([+-]?\d+)', status_line)
+        san_match = _re.search(r'SAN:\s*([+-]?\d+)', status_line)
+        if hp_match:
+            hp_change = int(hp_match.group(1))
+        if san_match:
+            san_change = int(san_match.group(1))
+
+    # 解析【数据更新】中的位置/物品变化
+    new_location = None
+    new_inventory = None
+    data_match = _re.search(r'【数据更新】[：:]\s*(\{.*?\})', answer_text, _re.DOTALL)
+    if data_match:
+        try:
+            data_json = json.loads(data_match.group(1))
+            if data_json.get("location"):
+                new_location = data_json["location"]
+            if data_json.get("inventory"):
+                new_inventory = data_json["inventory"]
+        except json.JSONDecodeError:
+            pass
+
+    # 同步当前玩家状态到players表
+    player = db.get_player(player_name)
+    if player:
+        updates = {}
+        if hp_change != 0:
+            updates["hp"] = max(0, min(player.get("max_hp", 100), player.get("hp", 100) + hp_change))
+        if san_change != 0:
+            updates["san"] = max(0, min(player.get("max_san", 100), player.get("san", 100) + san_change))
+        if new_location:
+            updates["current_location"] = new_location
+        if new_inventory:
+            updates["inventory"] = new_inventory
+        if updates.get("hp", player.get("hp", 100)) <= 0:
+            updates["is_dead"] = True
+        if updates.get("san", player.get("san", 100)) <= 0:
+            updates["is_crazy"] = True
+        if updates:
+            db.update_player_state(player_name, **updates)
+
+    # 解析【PvP结果】并应用伤害到目标
+    pvp_match = _re.search(r'【PvP结果】[：:]\s*(\{.*?\})', answer_text, _re.DOTALL)
+    if pvp_match:
+        try:
+            pvp_data = json.loads(pvp_match.group(1))
+            target = pvp_data.get("target", "")
+            damage = pvp_data.get("damage", 0)
+            hit = pvp_data.get("hit", False)
+            if target and hit and damage > 0:
+                db.update_player_hp(target, -damage)
+        except json.JSONDecodeError:
+            pass
+
+
 @app.post("/chat")
 async def chat_proxy(request: Request):
     """Dify API代理接口"""
     try:
         body = await request.json()
+        player_name = body.get("inputs", {}).get("player_name", "")
 
         # Dify要求user参数必须一致才能保持对话连续性
         dify_payload = {
@@ -455,6 +640,14 @@ async def chat_proxy(request: Request):
         # 如果Dify返回了错误信息
         if "error" in result:
             raise HTTPException(status_code=502, detail=result["error"])
+
+        # 同步玩家状态到players表（异步执行，不阻塞响应）
+        if player_name and result.get("answer"):
+            try:
+                _sync_player_from_answer(player_name, result["answer"])
+                _invalidate_cache()
+            except Exception as sync_err:
+                print(f"玩家状态同步失败: {sync_err}")
 
         return result
 

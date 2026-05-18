@@ -197,8 +197,8 @@
 
         /* ========== 左侧信息面板 ========== */
         .side-panel {
-            width: 780px;
-            min-width: 500px;
+            width: 40%;
+            min-width: 320px;
             display: flex;
             flex-direction: column;
             gap: 12px;
@@ -326,6 +326,23 @@
             color: #e6c76a;
         }
 
+        .logout-btn {
+            cursor: pointer;
+            font-size: 0.75em;
+            color: #ff6b6b;
+            margin-left: 8px;
+            padding: 2px 10px;
+            border: 1px solid rgba(255, 107, 107, 0.5);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            background: rgba(255, 107, 107, 0.1);
+            display: inline-block;
+        }
+        .logout-btn:hover {
+            background: rgba(255, 107, 107, 0.3);
+            border-color: #ff6b6b;
+        }
+
         /* ========== 世界状态 ========== */
         .atmosphere-display {
             text-align: center;
@@ -417,6 +434,289 @@
             margin-top: 4px;
         }
 
+        .task-actions {
+            margin-top: 8px;
+            display: flex;
+            gap: 6px;
+        }
+
+        .task-btn {
+            padding: 4px 14px;
+            border: none;
+            border-radius: 14px;
+            font-size: 0.75em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: bold;
+        }
+
+        .task-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .task-btn:active {
+            transform: translateY(0);
+        }
+
+        .task-btn-accept {
+            background: linear-gradient(135deg, #d4a843, #a67c00);
+            color: #fff;
+            box-shadow: 0 2px 10px rgba(180, 140, 60, 0.3);
+        }
+
+        .task-btn-accept:hover {
+            box-shadow: 0 4px 15px rgba(180, 140, 60, 0.5);
+        }
+
+        .task-btn-complete {
+            background: linear-gradient(135deg, #2ed573, #1e9a4a);
+            color: #fff;
+            box-shadow: 0 2px 10px rgba(46, 213, 115, 0.3);
+        }
+
+        .task-btn-complete:hover {
+            box-shadow: 0 4px 15px rgba(46, 213, 115, 0.5);
+        }
+
+        .task-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* ========== 在线玩家 ========== */
+        .players-section {
+            margin-top: 12px;
+        }
+
+        .players-section h4 {
+            color: #ffd93d;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+        }
+
+        .player-count-badge {
+            background: rgba(78, 205, 196, 0.2);
+            color: #4ecdc4;
+            font-size: 0.75em;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: 8px;
+            font-weight: normal;
+        }
+
+        .location-group {
+            margin-bottom: 12px;
+        }
+
+        .location-group-header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            margin-bottom: 6px;
+            cursor: pointer;
+        }
+
+        .location-group-header:hover {
+            opacity: 0.8;
+        }
+
+        .location-group-icon {
+            font-size: 0.85em;
+        }
+
+        .location-group-name {
+            color: #a29bfe;
+            font-size: 0.82em;
+            font-weight: bold;
+            flex: 1;
+        }
+
+        .location-group-count {
+            background: rgba(162, 155, 254, 0.15);
+            color: #a29bfe;
+            font-size: 0.7em;
+            padding: 1px 6px;
+            border-radius: 8px;
+        }
+
+        .player-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-left: 3px solid #4ecdc4;
+        }
+
+        .player-item.same-location {
+            border-left-color: #ffd93d;
+            background: rgba(255, 217, 61, 0.05);
+        }
+
+        .player-item.player-dead {
+            border-left-color: #ff4757;
+            opacity: 0.6;
+        }
+
+        .player-item.is-self {
+            border-left-color: #2ed573;
+        }
+
+        .player-name-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .player-item-name {
+            font-weight: bold;
+            color: #fff;
+            font-size: 0.85em;
+        }
+
+        .player-status-icon {
+            font-size: 0.75em;
+        }
+
+        .player-item-location {
+            font-size: 0.78em;
+            color: #aaa;
+            margin-bottom: 6px;
+        }
+
+        .player-item-hp {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75em;
+            color: #888;
+        }
+
+        .player-hp-bar {
+            flex: 1;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .player-hp-fill {
+            height: 100%;
+            border-radius: 3px;
+            background: linear-gradient(90deg, #ff4757, #ff6b6b);
+            transition: width 0.5s ease;
+        }
+
+        .pvp-btn {
+            padding: 4px 14px;
+            border: none;
+            border-radius: 14px;
+            font-size: 0.75em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: bold;
+            background: linear-gradient(135deg, #ff4757, #ff6b6b);
+            color: #fff;
+            box-shadow: 0 2px 10px rgba(255, 71, 87, 0.3);
+            margin-top: 6px;
+        }
+
+        .pvp-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.5);
+        }
+
+        .pvp-btn:active {
+            transform: translateY(0);
+        }
+
+        /* ========== 操作通知 ========== */
+        .task-notification {
+            position: fixed;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            padding: 12px 28px;
+            border-radius: 10px;
+            font-size: 0.9em;
+            z-index: 99999;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            backdrop-filter: blur(10px);
+        }
+
+        .task-notification.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .task-notification.success {
+            background: rgba(46, 213, 115, 0.2);
+            border: 1px solid rgba(46, 213, 115, 0.4);
+            color: #2ed573;
+            box-shadow: 0 5px 30px rgba(46, 213, 115, 0.2);
+        }
+
+        .task-notification.error {
+            background: rgba(255, 71, 87, 0.2);
+            border: 1px solid rgba(255, 71, 87, 0.4);
+            color: #ff6b6b;
+            box-shadow: 0 5px 30px rgba(255, 71, 87, 0.2);
+        }
+
+        .task-notification.info {
+            background: rgba(100, 180, 255, 0.15);
+            border: 1px solid rgba(100, 180, 255, 0.3);
+            color: #64b4ff;
+            box-shadow: 0 5px 30px rgba(100, 180, 255, 0.15);
+        }
+
+        /* ========== 角色名编辑 ========== */
+        .name-edit-input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(140, 100, 40, 0.4);
+            border-radius: 4px;
+            color: #fff;
+            padding: 2px 6px;
+            font-size: 0.85em;
+            outline: none;
+            width: 120px;
+        }
+
+        .name-edit-input:focus {
+            border-color: #e6c76a;
+        }
+
+        /* ========== 欢迎界面名称输入 ========== */
+        .welcome-name-input {
+            padding: 12px 24px;
+            font-size: 1em;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(140, 100, 40, 0.25);
+            border-radius: 25px;
+            color: #fff;
+            text-align: center;
+            outline: none;
+            margin-bottom: 24px;
+            width: 300px;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+        }
+
+        .welcome-name-input:focus {
+            border-color: #e6c76a;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 25px rgba(230, 199, 106, 0.15);
+        }
+
+        .welcome-name-input::placeholder {
+            color: rgba(255, 255, 255, 0.25);
+        }
+
         /* ========== 留言板 ========== */
         .messages-desc {
             color: #888;
@@ -451,6 +751,58 @@
             text-align: right;
         }
 
+        .death-msg-form {
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(255, 71, 87, 0.08);
+            border: 1px solid rgba(255, 71, 87, 0.2);
+            border-radius: 8px;
+        }
+
+        .death-msg-form.active {
+            display: block;
+        }
+
+        .death-msg-form textarea {
+            width: 100%;
+            height: 60px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 71, 87, 0.3);
+            border-radius: 6px;
+            color: #ddd;
+            padding: 8px;
+            font-size: 0.85em;
+            resize: none;
+            font-family: inherit;
+        }
+
+        .death-msg-form textarea::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .death-msg-form textarea:focus {
+            outline: none;
+            border-color: rgba(255, 71, 87, 0.6);
+        }
+
+        .death-msg-btn {
+            margin-top: 6px;
+            width: 100%;
+            padding: 6px;
+            background: linear-gradient(135deg, #ff4757, #c0392b);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8em;
+            font-family: inherit;
+        }
+
+        .death-msg-btn:hover {
+            opacity: 0.85;
+        }
+
         .message-dead {
             border-left-color: #ff4757;
         }
@@ -480,6 +832,7 @@
         /* ========== 右侧对话区 ========== */
         .chat-panel {
             flex: 1;
+            min-width: 0;
             display: flex;
             flex-direction: column;
             border: 1px solid rgba(140, 100, 40, 0.3);
@@ -908,6 +1261,213 @@
         ::-webkit-scrollbar-thumb:hover {
             background: rgba(255, 255, 255, 0.25);
         }
+
+        /* ========== 地图上方在线人数条 ========== */
+        .online-summary {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            background: rgba(78, 205, 196, 0.08);
+            border: 1px solid rgba(78, 205, 196, 0.15);
+            border-radius: 8px;
+            font-size: 0.8em;
+        }
+
+        .online-summary-icon {
+            font-size: 1.1em;
+        }
+
+        .online-summary-count {
+            color: #4ecdc4;
+            font-weight: bold;
+        }
+
+        .online-summary-locations {
+            color: rgba(255, 255, 255, 0.6);
+            flex: 1;
+            text-align: right;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .online-summary-locations .loc-tag {
+            display: inline-block;
+            background: rgba(162, 155, 254, 0.12);
+            color: #a29bfe;
+            padding: 1px 6px;
+            border-radius: 4px;
+            margin-left: 4px;
+            font-size: 0.85em;
+        }
+
+        /* ========== 视觉地图样式 ========== */
+        .game-map {
+            position: relative;
+            width: 100%;
+            height: 320px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: linear-gradient(180deg,
+                rgba(0, 180, 200, 0.06) 0%,
+                rgba(0, 150, 180, 0.04) 30%,
+                rgba(140, 100, 40, 0.06) 35%,
+                rgba(180, 140, 60, 0.05) 65%,
+                rgba(255, 60, 60, 0.06) 70%,
+                rgba(200, 40, 40, 0.08) 100%
+            );
+            border: 1px solid rgba(140, 100, 40, 0.2);
+        }
+
+        /* 区域分隔线 */
+        .game-map::before,
+        .game-map::after {
+            content: '';
+            position: absolute;
+            left: 10%;
+            right: 10%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(140, 100, 40, 0.3), transparent);
+        }
+        .game-map::before { top: 33%; }
+        .game-map::after { top: 66%; }
+
+        /* 区域标签 */
+        .map-zone-label {
+            position: absolute;
+            font-size: 0.6em;
+            letter-spacing: 3px;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        .map-zone-label.zone-coastal { top: 6px; left: 50%; transform: translateX(-50%); color: #4ecdc4; }
+        .map-zone-label.zone-town { top: calc(33% + 6px); left: 50%; transform: translateX(-50%); color: #d4a843; }
+        .map-zone-label.zone-dark { top: calc(66% + 6px); left: 50%; transform: translateX(-50%); color: #ff6b6b; }
+
+        /* SVG 路径层 */
+        .map-paths {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .map-paths line {
+            stroke-dasharray: 4 4;
+            opacity: 0.3;
+            transition: opacity 0.4s ease;
+        }
+
+        .map-paths line.path-coastal { stroke: #4ecdc4; }
+        .map-paths line.path-town { stroke: #d4a843; }
+        .map-paths line.path-dark { stroke: #ff6b6b; }
+        .map-paths line.path-cross { stroke: rgba(255, 255, 255, 0.2); }
+
+        .map-paths line.path-active {
+            opacity: 0.8;
+            stroke-dasharray: none;
+            stroke-width: 2;
+        }
+
+        /* 地点节点 */
+        .map-point {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            cursor: default;
+            transition: all 0.4s ease;
+            z-index: 2;
+        }
+
+        .map-point .point-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            border: 2px solid rgba(140, 100, 40, 0.25);
+            background: rgba(15, 15, 35, 0.9);
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .map-point .point-name {
+            font-size: 0.65em;
+            color: rgba(255, 255, 255, 0.5);
+            white-space: nowrap;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+            transition: all 0.4s ease;
+        }
+
+        /* 区域颜色 */
+        .map-point.type-coastal .point-icon { border-color: rgba(78, 205, 196, 0.4); }
+        .map-point.type-town .point-icon { border-color: rgba(212, 168, 67, 0.4); }
+        .map-point.type-dark .point-icon { border-color: rgba(255, 107, 107, 0.4); }
+
+        /* 当前位置 */
+        .map-point.current .point-icon {
+            border-color: #e6c76a;
+            box-shadow: 0 0 15px rgba(230, 199, 106, 0.5), 0 0 30px rgba(230, 199, 106, 0.2);
+            animation: mapPointPulse 2s ease-in-out infinite;
+        }
+        .map-point.current .point-name {
+            color: #ffd93d;
+            font-weight: bold;
+        }
+
+        @keyframes mapPointPulse {
+            0%, 100% { box-shadow: 0 0 15px rgba(230, 199, 106, 0.5), 0 0 30px rgba(230, 199, 106, 0.2); }
+            50% { box-shadow: 0 0 25px rgba(230, 199, 106, 0.7), 0 0 50px rgba(230, 199, 106, 0.3); }
+        }
+
+        /* 已访问 */
+        .map-point.visited .point-icon {
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        .map-point.visited .point-name {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* 隐藏/锁定 */
+        .map-point.locked .point-icon {
+            border-style: dashed;
+            opacity: 0.4;
+        }
+        .map-point.locked .point-name {
+            color: rgba(255, 255, 255, 0.2);
+        }
+        .map-point .point-player-count {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            background: #ff4757;
+            color: #fff;
+            font-size: 0.55em;
+            font-weight: bold;
+            min-width: 16px;
+            height: 16px;
+            line-height: 16px;
+            text-align: center;
+            border-radius: 8px;
+            padding: 0 3px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+            z-index: 10;
+        }
+
+        .map-point.locked .point-icon::after {
+            content: '🔒';
+            font-size: 10px;
+            position: absolute;
+        }
     </style>
 </head>
 <body>
@@ -927,6 +1487,7 @@
             AI驱动的多人异步角色扮演冒险<br>
             你的每一个选择，都将影响这个世界
         </p>
+        <input type="text" class="welcome-name-input" id="welcomeNameInput" placeholder="输入调查员名称..." maxlength="20">
         <button class="welcome-start-btn" onclick="startGame()">开始冒险</button>
     </div>
 
@@ -971,6 +1532,7 @@
                     <div class="info-item">
                         <span class="info-label">名称:</span>
                         <span class="info-value" id="playerName">调查员</span>
+                        <span id="logoutBtn" class="logout-btn" onclick="logout()" title="退出登录">退出</span>
                     </div>
                     <div class="info-item">
                         <span class="info-label">位置:</span>
@@ -981,6 +1543,24 @@
                         <span class="info-value" id="inventory">手电筒,笔记本,急救包</span>
                     </div>
                 </div>
+            </div>
+
+            <!-- 地图 -->
+            <div class="panel-card">
+                <h3><span class="icon">🗺️</span> 世界地图</h3>
+                <div class="online-summary" id="onlineSummary" style="display:none;">
+                    <span class="online-summary-icon">👥</span>
+                    <span class="online-summary-count" id="onlineSummaryCount">0 人在线</span>
+                    <span class="online-summary-locations" id="onlineSummaryLocations"></span>
+                </div>
+                <div class="game-map" id="gameMap"></div>
+            </div>
+
+            <!-- 在线玩家 -->
+            <div class="panel-card">
+                <h3><span class="icon">👥</span> 在线玩家<span class="player-count-badge" id="playerCountBadge">0 人</span></h3>
+                <div id="playersList"></div>
+                <button class="refresh-btn" onclick="loadPlayers()">刷新玩家</button>
             </div>
 
             <!-- 世界状态 -->
@@ -1003,6 +1583,10 @@
                 <h3><span class="icon">📝</span> 死亡墓碑</h3>
                 <p class="messages-desc">记录着前辈调查员的遗言...</p>
                 <div id="messagesList"></div>
+                <div class="death-msg-form" id="deathMsgForm">
+                    <textarea id="deathMsgInput" placeholder="留下你的遗言...（最多100字）" maxlength="100"></textarea>
+                    <button class="death-msg-btn" onclick="submitDeathMessage()">刻下遗言</button>
+                </div>
                 <button class="refresh-btn" onclick="loadMessages()">刷新留言</button>
             </div>
         </div>
@@ -1034,7 +1618,7 @@
             </div>
             <div class="chat-messages" id="chatMessages">
                 <div class="chat-message chat-message-system">
-                    欢迎来到无尽幻境！请输入你的调查员名称开始冒险...
+                    迷雾笼罩着这座无名的小镇，海风带来远方的低语。你站在小镇入口，脚下是布满青苔的石板路，前方的路灯在雾中摇曳着昏黄的光。空气中弥漫着咸腥和腐朽的气味，远处隐约传来不知名的声响。你整理了一下衣领，踏入了这片未知的黑暗——欢迎来到无尽幻境。
                 </div>
             </div>
             <div class="quick-actions">
@@ -1054,7 +1638,7 @@
 
     <script>
         // API配置
-        const API_BASE_URL = 'http://192.168.25.137:8000';  // 改成运行后端的机器IP
+        const API_BASE_URL = 'http://192.168.25.29:8000';
         const CHAT_API_URL = `${API_BASE_URL}/chat`;
 
         // 游戏状态
@@ -1072,22 +1656,216 @@
         let playerId = 'player-' + Date.now();
         let isSending = false;
 
+        // ========== 地图数据 ==========
+        const MAP_POINTS = [
+            { id: 'lighthouse',       name: '灯塔',     icon: '🗼', x: 25,  y: 12,  type: 'coastal', locked: false },
+            { id: 'pier',             name: '码头',     icon: '⚓', x: 72,  y: 14,  type: 'coastal', locked: false },
+            { id: 'lighthouse_secret',name: '灯塔密室', icon: '🔮', x: 18,  y: 28,  type: 'coastal', locked: true  },
+            { id: 'town_entrance',    name: '小镇入口', icon: '🏘', x: 48,  y: 46,  type: 'town',    locked: false },
+            { id: 'church',           name: '教堂',     icon: '⛪', x: 18,  y: 55,  type: 'town',    locked: false },
+            { id: 'library',          name: '图书馆',   icon: '📚', x: 78,  y: 52,  type: 'town',    locked: false },
+            { id: 'doctor_house',     name: '医生家',   icon: '🏠', x: 25,  y: 68,  type: 'town',    locked: false },
+            { id: 'hospital',         name: '医院',     icon: '🏥', x: 62,  y: 80,  type: 'dark',    locked: false },
+            { id: 'mine',             name: '矿洞',     icon: '⛏',  x: 30,  y: 87,  type: 'dark',    locked: false },
+            { id: 'catacombs',        name: '地下墓穴', icon: '💀', x: 36,  y: 98,  type: 'dark',    locked: true  },
+        ];
+
+        const MAP_PATHS = [
+            { from: 'lighthouse',       to: 'pier',             type: 'coastal' },
+            { from: 'lighthouse',       to: 'lighthouse_secret',type: 'coastal' },
+            { from: 'lighthouse',       to: 'town_entrance',    type: 'cross'   },
+            { from: 'pier',             to: 'town_entrance',    type: 'cross'   },
+            { from: 'town_entrance',    to: 'church',           type: 'town'    },
+            { from: 'town_entrance',    to: 'library',          type: 'town'    },
+            { from: 'town_entrance',    to: 'hospital',         type: 'cross'   },
+            { from: 'church',           to: 'doctor_house',     type: 'town'    },
+            { from: 'hospital',         to: 'mine',             type: 'dark'    },
+            { from: 'mine',             to: 'catacombs',        type: 'dark'    },
+        ];
+
+        let discoveredLocations = new Set();
+
+        const LOCATION_NAME_TO_ID = {};
+        MAP_POINTS.forEach(p => { LOCATION_NAME_TO_ID[p.name] = p.id; });
+
+        function renderMap() {
+            const container = document.getElementById('gameMap');
+            container.innerHTML = '';
+
+            // 区域标签
+            const labels = [
+                { text: '～ 海 滨 区 ～', cls: 'zone-coastal' },
+                { text: '☆ 城 镇 区 ☆',  cls: 'zone-town'    },
+                { text: '⚠ 禁 区 ⚠',     cls: 'zone-dark'    },
+            ];
+            labels.forEach(l => {
+                const el = document.createElement('div');
+                el.className = `map-zone-label ${l.cls}`;
+                el.textContent = l.text;
+                container.appendChild(el);
+            });
+
+            // SVG 路径层
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('class', 'map-paths');
+            svg.setAttribute('viewBox', '0 0 100 100');
+            svg.setAttribute('preserveAspectRatio', 'none');
+            MAP_PATHS.forEach(p => {
+                const from = MAP_POINTS.find(pt => pt.id === p.from);
+                const to = MAP_POINTS.find(pt => pt.id === p.to);
+                if (!from || !to) return;
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', from.x);
+                line.setAttribute('y1', from.y);
+                line.setAttribute('x2', to.x);
+                line.setAttribute('y2', to.y);
+                line.setAttribute('class', `path-${p.type}`);
+                line.dataset.from = p.from;
+                line.dataset.to = p.to;
+                svg.appendChild(line);
+            });
+            container.appendChild(svg);
+
+            // 地点节点
+            MAP_POINTS.forEach(loc => {
+                const node = document.createElement('div');
+                node.className = `map-point type-${loc.type}`;
+                if (loc.locked && !discoveredLocations.has(loc.id)) {
+                    node.classList.add('locked');
+                }
+                node.id = 'map-point-' + loc.id;
+                node.style.left = loc.x + '%';
+                node.style.top = loc.y + '%';
+                node.innerHTML = `<div class="point-icon">${loc.icon}</div><div class="point-name">${loc.name}</div>`;
+                container.appendChild(node);
+            });
+        }
+
+        function updateMap(locationName) {
+            // 清除所有 current 标记
+            document.querySelectorAll('.map-point.current').forEach(el => el.classList.remove('current'));
+            document.querySelectorAll('.map-paths line.path-active').forEach(el => el.classList.remove('path-active'));
+
+            const id = LOCATION_NAME_TO_ID[locationName];
+            if (!id) return;
+
+            discoveredLocations.add(id);
+
+            const node = document.getElementById('map-point-' + id);
+            if (node) {
+                node.classList.add('current', 'visited');
+                node.classList.remove('locked');
+            }
+
+            // 高亮连接到当前位置的路径
+            document.querySelectorAll('.map-paths line').forEach(line => {
+                if (line.dataset.from === id || line.dataset.to === id) {
+                    line.classList.add('path-active');
+                }
+            });
+
+            // 关联解锁：教堂 → 地下墓穴
+            if (id === 'church') {
+                const catacombs = document.getElementById('map-point-catacombs');
+                if (catacombs) catacombs.classList.remove('locked');
+            }
+        }
+
+        function isLocationInMap(name) {
+            return !!LOCATION_NAME_TO_ID[name];
+        }
+
+        // ========== 地图上显示玩家分布 ==========
+        function updateMapPlayers(players) {
+            // 先清除所有旧的玩家人数标记
+            document.querySelectorAll('.map-point .point-player-count').forEach(el => el.remove());
+
+            // 统计每个地点的玩家数
+            const locCounts = {};
+            players.forEach(p => {
+                const loc = p.current_location;
+                if (loc) {
+                    locCounts[loc] = (locCounts[loc] || 0) + 1;
+                }
+            });
+
+            // 在地图节点上添加人数标记
+            for (const [locName, count] of Object.entries(locCounts)) {
+                const locId = LOCATION_NAME_TO_ID[locName];
+                if (!locId) continue;
+                const node = document.getElementById('map-point-' + locId);
+                if (!node) continue;
+                const badge = document.createElement('div');
+                badge.className = 'point-player-count';
+                badge.textContent = count;
+                badge.title = count + ' 位玩家';
+                node.appendChild(badge);
+            }
+        }
+
         // ========== 开场欢迎界面 ==========
         function startGame() {
             const welcomeScreen = document.getElementById('welcomeScreen');
             const gameLayout = document.getElementById('gameLayout');
 
+            const nameInput = document.getElementById('welcomeNameInput');
+            const name = nameInput.value.trim();
+            if (!name) {
+                nameInput.style.borderColor = '#ff4757';
+                nameInput.style.boxShadow = '0 0 25px rgba(255, 71, 87, 0.3)';
+                nameInput.placeholder = '⚠️ 请输入调查员名称！';
+                nameInput.focus();
+                setTimeout(() => {
+                    nameInput.style.borderColor = '';
+                    nameInput.style.boxShadow = '';
+                    nameInput.placeholder = '输入调查员名称...';
+                }, 2000);
+                return;
+            }
+            gameState.playerName = name;
+            document.getElementById('playerName').textContent = name;
+            localStorage.setItem('playerName', name);
+
             welcomeScreen.classList.add('hidden');
             setTimeout(() => {
                 welcomeScreen.style.display = 'none';
                 gameLayout.classList.add('active');
+                registerPlayer().then(() => loadPlayers());
                 loadWorldState();
                 loadMessages();
                 createParticles();
+                renderMap();
+                updateMap(gameState.currentLocation);
+                makeNameEditable();
             }, 1000);
         }
 
-        // ========== 背景粒子效果 ==========
+        // ========== 自动登录（刷新后恢复） ==========
+        function autoLogin() {
+            const savedName = localStorage.getItem('playerName');
+            if (!savedName) return;
+            gameState.playerName = savedName;
+            document.getElementById('playerName').textContent = savedName;
+            document.getElementById('welcomeScreen').classList.add('hidden');
+            document.getElementById('welcomeScreen').style.display = 'none';
+            document.getElementById('gameLayout').classList.add('active');
+            registerPlayer().then(() => loadPlayers());
+            loadWorldState();
+            loadMessages();
+            createParticles();
+            renderMap();
+            updateMap(gameState.currentLocation);
+            makeNameEditable();
+        }
+
+        // ========== 退出登录 ==========
+        function logout() {
+            if (!confirm('确定退出登录？')) return;
+            localStorage.removeItem('playerName');
+            location.reload();
+        }
+
+        // ========== 粒子背景效果 ==========
         function createParticles() {
             const bg = document.getElementById('atmosphereBg');
             for (let i = 0; i < 40; i++) {
@@ -1148,6 +1926,7 @@
             if (data.currentLocation) {
                 gameState.currentLocation = data.currentLocation;
                 document.getElementById('currentLocation').textContent = data.currentLocation;
+                updateMap(data.currentLocation);
             }
             if (data.inventory) {
                 gameState.inventory = data.inventory;
@@ -1157,6 +1936,7 @@
             if (gameState.hp <= 0 && !gameState.isDead) {
                 gameState.isDead = true;
                 showScreenEffect('death');
+                document.getElementById('deathMsgForm').classList.add('active');
             }
             if (gameState.san <= 0 && !gameState.isCrazy) {
                 gameState.isCrazy = true;
@@ -1200,6 +1980,8 @@
 
                 const tasksList = document.getElementById('tasksList');
                 tasksList.innerHTML = '';
+                // 检查当前玩家是否已有进行中的任务
+                const hasActiveTask = data.tasks.some(t => t.status === 'in_progress' && t.player === gameState.playerName);
                 data.tasks.forEach(task => {
                     const taskDiv = document.createElement('div');
                     taskDiv.className = 'task-item';
@@ -1218,14 +2000,109 @@
                     taskDiv.innerHTML = `
                         <div class="task-name">${task.name}</div>
                         <div class="task-description">${task.description}</div>
-                        <span class="task-status ${statusClass}">${statusText}</span>
-                        ${task.player ? `<div class="task-player">玩家: ${task.player}</div>` : ''}
+                        <div style="display:flex;align-items:center;gap:8px;">
+                            <span class="task-status ${statusClass}">${statusText}</span>
+                            ${task.player ? `<span class="task-player">${task.player}</span>` : ''}
+                        </div>
+                        <div class="task-actions">
+                            ${task.status === 'pending' && !hasActiveTask
+                                ? `<button class="task-btn task-btn-accept" onclick="acceptTask('${task.id}')">接取任务</button>`
+                                : ''}
+                            ${task.status === 'pending' && hasActiveTask
+                                ? `<span style="font-size:0.7em;color:rgba(255,255,255,0.3);">需先完成当前任务</span>`
+                                : ''}
+                            ${task.status === 'in_progress' && task.player === gameState.playerName
+                                ? `<button class="task-btn task-btn-complete" onclick="completeTask('${task.id}', '${task.name}')">提交完成</button>`
+                                : ''}
+                        </div>
                     `;
                     tasksList.appendChild(taskDiv);
                 });
             } catch (error) {
                 console.error('加载世界状态失败:', error);
             }
+        }
+
+        // ========== 任务操作 ==========
+        async function acceptTask(taskId) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/accept-task`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        task_id: taskId,
+                        player: gameState.playerName
+                    })
+                });
+                const data = await response.json();
+                showNotification(data.success ? '✅ 任务接取成功！' : '❌ ' + data.message, data.success ? 'success' : 'error');
+                loadWorldState();
+            } catch (error) {
+                showNotification('❌ 网络错误，请检查连接', 'error');
+            }
+        }
+
+        function completeTask(taskId, taskName) {
+            // 不直接调 API，而是向 AI 发送提交请求，由主持人判定是否真正完成
+            const msg = `我要提交完成任务：${taskName}（任务编号：${taskId}）`;
+            document.getElementById('chatInput').value = msg;
+            sendChatMessage();
+        }
+
+        // ========== 操作通知 ==========
+        function showNotification(message, type = 'info') {
+            const existing = document.querySelector('.task-notification');
+            if (existing) existing.remove();
+
+            const notification = document.createElement('div');
+            notification.className = `task-notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            requestAnimationFrame(() => {
+                notification.classList.add('show');
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                    setTimeout(() => notification.remove(), 300);
+                }, 2500);
+            });
+        }
+
+        // ========== 角色名点击编辑 ==========
+        function makeNameEditable() {
+            const nameSpan = document.getElementById('playerName');
+            nameSpan.style.cursor = 'pointer';
+            nameSpan.title = '点击修改名称';
+
+            nameSpan.addEventListener('click', function edit() {
+                const current = this.textContent;
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.value = current;
+                input.className = 'name-edit-input';
+                input.maxLength = 20;
+                this.replaceWith(input);
+                input.focus();
+                input.select();
+
+                function save() {
+                    const name = input.value.trim() || '调查员';
+                    gameState.playerName = name;
+                    const span = document.createElement('span');
+                    span.className = 'info-value';
+                    span.id = 'playerName';
+                    span.textContent = name;
+                    span.style.cursor = 'pointer';
+                    span.title = '点击修改名称';
+                    input.replaceWith(span);
+                    span.addEventListener('click', edit);
+                }
+
+                input.addEventListener('blur', save);
+                input.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') input.blur();
+                });
+            });
         }
 
         // ========== 加载留言 ==========
@@ -1253,6 +2130,195 @@
                 });
             } catch (error) {
                 console.error('加载留言失败:', error);
+            }
+        }
+
+        // ========== 死亡留言 ==========
+        async function submitDeathMessage() {
+            const input = document.getElementById('deathMsgInput');
+            const content = input.value.trim();
+            if (!content) {
+                input.placeholder = '请输入遗言内容！';
+                return;
+            }
+            try {
+                await fetch(`${API_BASE_URL}/add-message`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        location: gameState.currentLocation,
+                        content: content,
+                        player: gameState.playerName,
+                        player_status: 'dead'
+                    })
+                });
+                input.value = '';
+                input.placeholder = '遗言已刻下...';
+                loadMessages();
+            } catch (error) {
+                console.error('留言失败:', error);
+            }
+        }
+
+        // ========== 玩家注册 ==========
+        async function registerPlayer() {
+            try {
+                await fetch(`${API_BASE_URL}/register-player`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: gameState.playerName,
+                        hp: gameState.hp,
+                        san: gameState.san,
+                        current_location: gameState.currentLocation,
+                        inventory: gameState.inventory
+                    })
+                });
+            } catch (error) {
+                console.error('注册玩家失败:', error);
+            }
+        }
+
+        // ========== 加载在线玩家（按地点分组） ==========
+        async function loadPlayers() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/players`);
+                const data = await response.json();
+                const playersList = document.getElementById('playersList');
+                const countBadge = document.getElementById('playerCountBadge');
+                playersList.innerHTML = '';
+
+                if (!data.players || data.players.length === 0) {
+                    countBadge.textContent = '0 人';
+                    playersList.innerHTML = '<p style="color: #666; text-align: center; padding: 10px; font-size: 0.8em;">暂无在线玩家...</p>';
+                    return;
+                }
+
+                // 更新在线人数
+                countBadge.textContent = data.players.length + ' 人';
+
+                // 按地点分组
+                const groups = {};
+                data.players.forEach(player => {
+                    const loc = player.current_location || '未知地点';
+                    if (!groups[loc]) groups[loc] = [];
+                    groups[loc].push(player);
+                });
+
+                // 当前玩家所在地点排最前面
+                const sortedLocations = Object.keys(groups).sort((a, b) => {
+                    if (a === gameState.currentLocation) return -1;
+                    if (b === gameState.currentLocation) return 1;
+                    return groups[b].length - groups[a].length;
+                });
+
+                sortedLocations.forEach(location => {
+                    const players = groups[location];
+                    const groupDiv = document.createElement('div');
+                    groupDiv.className = 'location-group';
+
+                    // 分组标题
+                    const isCurrentLoc = location === gameState.currentLocation;
+                    groupDiv.innerHTML = `
+                        <div class="location-group-header">
+                            <span class="location-group-icon">${isCurrentLoc ? '📍' : '📌'}</span>
+                            <span class="location-group-name">${location}${isCurrentLoc ? ' (你在这里)' : ''}</span>
+                            <span class="location-group-count">${players.length}人</span>
+                        </div>
+                    `;
+
+                    // 该地点下的玩家列表
+                    players.forEach(player => {
+                        const isSelf = player.name === gameState.playerName;
+                        const isDead = player.is_dead;
+
+                        let itemClass = 'player-item';
+                        if (isDead) itemClass += ' player-dead';
+                        else if (isSelf) itemClass += ' is-self';
+                        else if (isCurrentLoc) itemClass += ' same-location';
+
+                        const hpPercent = player.max_hp > 0 ? Math.round(player.hp * 100 / player.max_hp) : 0;
+
+                        let statusIcon = '';
+                        if (isDead) statusIcon = '💀';
+                        else if (player.is_crazy) statusIcon = '🤪';
+                        else if (isSelf) statusIcon = '⭐';
+
+                        let actionHtml = '';
+                        if (!isSelf && !isDead && !gameState.isDead && isCurrentLoc) {
+                            actionHtml = `<button class="pvp-btn" onclick="pvpAttack('${player.name}')">⚔ 攻击</button>`;
+                        } else if (!isSelf && isCurrentLoc && isDead) {
+                            actionHtml = '<span style="font-size:0.7em;color:#ff4757;">已死亡</span>';
+                        }
+
+                        const div = document.createElement('div');
+                        div.className = itemClass;
+                        div.innerHTML = `
+                            <div class="player-name-row">
+                                <span class="player-item-name">${isSelf ? '⭐ ' : ''}${player.name}</span>
+                                <span class="player-status-icon">${statusIcon}</span>
+                            </div>
+                            <div class="player-item-hp">
+                                <span>HP ${player.hp}/${player.max_hp}</span>
+                                <div class="player-hp-bar"><div class="player-hp-fill" style="width:${hpPercent}%"></div></div>
+                            </div>
+                            ${actionHtml}
+                        `;
+                        groupDiv.appendChild(div);
+                    });
+
+                    playersList.appendChild(groupDiv);
+                });
+
+                // 更新地图上方的在线人数条
+                const summary = document.getElementById('onlineSummary');
+                const summaryCount = document.getElementById('onlineSummaryCount');
+                const summaryLocs = document.getElementById('onlineSummaryLocations');
+                if (data.players.length > 0) {
+                    summary.style.display = 'flex';
+                    summaryCount.textContent = data.players.length + ' 人在线';
+                    // 每个地点显示人数
+                    summaryLocs.innerHTML = sortedLocations.map(loc => {
+                        const count = groups[loc].length;
+                        const isCurrent = loc === gameState.currentLocation;
+                        return `<span class="loc-tag">${isCurrent ? '📍' : '📌'}${loc}(${count})</span>`;
+                    }).join('');
+                } else {
+                    summary.style.display = 'none';
+                }
+
+                // 更新地图上的玩家分布标记
+                updateMapPlayers(data.players);
+            } catch (error) {
+                console.error('加载在线玩家失败:', error);
+            }
+        }
+
+        // ========== PvP攻击（通过AI DM） ==========
+        function pvpAttack(targetName) {
+            const msg = `我要攻击${targetName}`;
+            document.getElementById('chatInput').value = msg;
+            sendChatMessage();
+        }
+
+        // ========== 同步玩家状态到后端 ==========
+        async function syncPlayerStateToBackend() {
+            try {
+                await fetch(`${API_BASE_URL}/update-player-state`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: gameState.playerName,
+                        hp: gameState.hp,
+                        san: gameState.san,
+                        current_location: gameState.currentLocation,
+                        inventory: gameState.inventory,
+                        is_dead: gameState.isDead,
+                        is_crazy: gameState.isCrazy
+                    })
+                });
+            } catch (error) {
+                console.error('同步玩家状态失败:', error);
             }
         }
 
@@ -1312,9 +2378,9 @@
             text = text.replace(/SAN[:\s]*([+-]?\d+)/gi, '<span class="san-change">SAN: $1</span>');
             text = text.replace(/检定结果[：:]\s*成功/g, '<span class="check-success">检定结果：成功</span>');
             text = text.replace(/检定结果[：:]\s*失败/g, '<span class="check-fail">检定结果：失败</span>');
-            const locations = ['小镇入口', '图书馆', '医院', '灯塔', '教堂', '医生家'];
-            locations.forEach(loc => {
-                text = text.replace(new RegExp(loc, 'g'), `<span class="location">${loc}</span>`);
+            // 从地图数据动态生成地点高亮
+            MAP_POINTS.forEach(loc => {
+                text = text.replace(new RegExp(loc.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), `<span class="location">${loc.name}</span>`);
             });
             return text;
         }
@@ -1345,7 +2411,8 @@
                     body: JSON.stringify({
                         query: message,
                         conversation_id: conversationId,
-                        user: playerId
+                        user: playerId,
+                        inputs: { player_name: gameState.playerName }
                     })
                 });
 
@@ -1356,7 +2423,7 @@
                 if (data.answer) {
                     const formattedAnswer = formatMessage(data.answer);
                     addChatMessage('ai', formattedAnswer, true);
-                    parseAndUpdateStats(data.answer);
+                    parseAndUpdateStats(data.answer, message);
 
                     if (data.conversation_id) {
                         conversationId = data.conversation_id;
@@ -1379,7 +2446,7 @@
         }
 
         // ========== 解析AI回复中的状态变化 ==========
-        function parseAndUpdateStats(text) {
+        function parseAndUpdateStats(text, userQuery) {
             const hpMatch = text.match(/HP[:\s]*([+-]?\d+)/i);
             if (hpMatch) {
                 const hpChange = parseInt(hpMatch[1]);
@@ -1396,10 +2463,67 @@
                 }
             }
 
-            const locationMatch = text.match(/(?:前往|来到|到达|进入)[了]?[：:\s]*([^\s,，。.]+)/);
-            if (locationMatch) {
-                updateCharacterStats({ currentLocation: locationMatch[1] });
+            // 尝试从【数据更新】JSON中提取location
+            const dataUpdateMatch = text.match(/【数据更新】[：:]\s*(\{.*?\})(?:\n|$)/);
+            if (dataUpdateMatch) {
+                try {
+                    const dataUpdate = JSON.parse(dataUpdateMatch[1]);
+                    if (dataUpdate && dataUpdate.location && isLocationInMap(dataUpdate.location)) {
+                        updateCharacterStats({ currentLocation: dataUpdate.location });
+                        return;
+                    }
+                } catch(e) {}
             }
+
+            // 从AI回复中提取位置（自然语言描述）
+            let foundLocation = findLocationInText(text);
+            if (foundLocation) {
+                // 只有AI确实描述了移动到该位置才更新
+                if (text.includes('来到' + foundLocation) || text.includes('前往' + foundLocation) ||
+                    text.includes('到达' + foundLocation) || text.includes('进入' + foundLocation) ||
+                    text.includes(foundLocation + '内部') || text.includes('伫立在' + foundLocation) ||
+                    text.includes('站在' + foundLocation) || text.includes('身处' + foundLocation) ||
+                    text.includes('你是' + foundLocation) || text.includes('位于' + foundLocation) ||
+                    text.includes(foundLocation + '中')) {
+                    updateCharacterStats({ currentLocation: foundLocation });
+                    return;
+                }
+            }
+
+            // 从用户输入中提取（用户说"前往图书馆" → 更新地图）
+            if (userQuery) {
+                const userLocation = findLocationInText(userQuery);
+                if (userLocation) {
+                    const movePattern = new RegExp(`(?:前往|去|到|进入|走去|跑向|来到|寻找|调查|探索|搜索|查看|检查|进入).{0,6}${escapeRegex(userLocation)}`);
+                    if (movePattern.test(userQuery)) {
+                        // 检查AI回复没有拒绝该行动
+                        const rejectionPattern = /不能|无法|不行|拒绝|失败|被拦住|进不去|没反应|打不开/;
+                        if (!rejectionPattern.test(text)) {
+                            updateCharacterStats({ currentLocation: userLocation });
+                        }
+                    }
+                }
+            }
+
+            // 同步状态到后端players表
+            syncPlayerStateToBackend();
+        }
+
+        function findLocationInText(text) {
+            let result = null;
+            let maxIdx = -1;
+            MAP_POINTS.forEach(loc => {
+                const idx = text.indexOf(loc.name);
+                if (idx !== -1 && idx > maxIdx) {
+                    maxIdx = idx;
+                    result = loc.name;
+                }
+            });
+            return result;
+        }
+
+        function escapeRegex(str) {
+            return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         }
 
         // ========== 添加聊天消息 ==========
@@ -1426,10 +2550,12 @@
 
         // ========== 页面初始化 ==========
         document.addEventListener('DOMContentLoaded', function() {
+            autoLogin();
             setInterval(() => {
                 if (document.getElementById('gameLayout').classList.contains('active')) {
                     loadWorldState();
                     loadMessages();
+                    loadPlayers();
                 }
             }, 30000);
         });

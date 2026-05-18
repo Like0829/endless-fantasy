@@ -13,7 +13,7 @@ from http.server import SimpleHTTPRequestHandler
 # 配置
 PORT = 3001
 HOST = "0.0.0.0"
-BACKEND_URL = "http://192.168.88.1:8000"
+BACKEND_URL = "http://192.168.25.29:8000"
 
 
 def get_local_ip():

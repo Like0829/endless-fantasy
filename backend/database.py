@@ -47,6 +47,9 @@ REQUIRED_INDEXES = [
     "ALTER TABLE messages ADD INDEX IF NOT EXISTS idx_location (location)",
     "ALTER TABLE messages ADD INDEX IF NOT EXISTS idx_player (player)",
     "ALTER TABLE messages ADD INDEX IF NOT EXISTS idx_created_at (created_at)",
+    "ALTER TABLE players ADD INDEX IF NOT EXISTS idx_p_location (current_location)",
+    "ALTER TABLE players ADD INDEX IF NOT EXISTS idx_p_name (name)",
+    "ALTER TABLE players ADD INDEX IF NOT EXISTS idx_p_last_active (last_active)",
 ]
 
 
@@ -106,10 +109,20 @@ def get_world_state():
             )
             messages = cursor.fetchall()
 
+            # 查询在线玩家（5分钟内活跃）
+            cursor.execute(
+                "SELECT name, hp, max_hp, san, max_san, current_location, "
+                "is_dead, is_crazy, "
+                "DATE_FORMAT(last_active, '%%Y-%%m-%%d %%H:%%i:%%s') as last_active "
+                "FROM players WHERE last_active > NOW() - INTERVAL 5 MINUTE"
+            )
+            online_players = cursor.fetchall()
+
             return {
                 "atmosphere": atmosphere_value,
                 "tasks": tasks,
-                "messages": messages
+                "messages": messages,
+                "players": online_players
             }
     finally:
         conn.close()
@@ -144,13 +157,25 @@ def accept_task(task_id, player):
     """
     接受任务（使用 FOR UPDATE 行锁防止并发冲突）
 
-    两个玩家同时接取同一个任务时：
-    1. 第一个拿到锁 → 查到 pending → 更新成功
-    2. 第二个拿到锁 → 查到 in_progress → 返回已被接取
+    规则：
+    1. 每个玩家同时只能接取一个任务
+    2. 必须完成当前任务后才能接取下一个
     """
     conn = get_connection()
     try:
         with conn.cursor(pymysql.cursors.DictCursor) as cursor:
+            # 检查该玩家是否已有进行中的任务
+            cursor.execute(
+                "SELECT id, name FROM tasks WHERE player = %s AND status = 'in_progress'",
+                (player,)
+            )
+            existing = cursor.fetchone()
+            if existing:
+                return {
+                    "success": False,
+                    "message": f"你已有进行中的任务「{existing['name']}」，完成后才能接取新任务"
+                }
+
             # 行级锁：锁定这一行直到事务结束
             cursor.execute(
                 "SELECT status FROM tasks WHERE id = %s FOR UPDATE",
@@ -276,5 +301,166 @@ def get_all_tasks():
                 "SELECT id, name, description, status, player FROM tasks"
             )
             return cursor.fetchall()
+    finally:
+        conn.close()
+
+
+# ============================================================
+# 玩家表（PvP多人在线状态）
+# ============================================================
+
+def register_player(name, hp=100, max_hp=100, san=100, max_san=100,
+                    current_location='小镇入口', inventory='手电筒,笔记本,急救包'):
+    """注册玩家（已存在则更新活跃时间）"""
+    conn = get_connection()
+    try:
+        with conn.cursor(pymysql.cursors.DictCursor) as cursor:
+            cursor.execute(
+                "INSERT INTO players (name, hp, max_hp, san, max_san, current_location, inventory) "
+                "VALUES (%s, %s, %s, %s, %s, %s, %s) "
+                "ON DUPLICATE KEY UPDATE last_active = CURRENT_TIMESTAMP",
+                (name, hp, max_hp, san, max_san, current_location, inventory)
+            )
+            conn.commit()
+            cursor.execute("SELECT * FROM players WHERE name = %s", (name,))
+            player = cursor.fetchone()
+            return {"success": True, "player": player}
+    except Exception as e:
+        conn.rollback()
+        return {"success": False, "message": str(e)}
+    finally:
+        conn.close()
+
+
+def get_player(name):
+    """查询单个玩家"""
+    conn = get_connection()
+    try:
+        with conn.cursor(pymysql.cursors.DictCursor) as cursor:
+            cursor.execute("SELECT * FROM players WHERE name = %s", (name,))
+            return cursor.fetchone()
+    finally:
+        conn.close()
+
+
+def get_all_players():
+    """查询所有玩家"""
+    conn = get_connection()
+    try:
+        with conn.cursor(pymysql.cursors.DictCursor) as cursor:
+            cursor.execute(
+                "SELECT name, hp, max_hp, san, max_san, current_location, "
+                "is_dead, is_crazy, "
+                "DATE_FORMAT(last_active, '%%Y-%%m-%%d %%H:%%i:%%s') as last_active "
+                "FROM players ORDER BY last_active DESC"
+            )
+            return cursor.fetchall()
+    finally:
+        conn.close()
+
+
+def get_online_players():
+    """查询在线玩家（5分钟内活跃）"""
+    conn = get_connection()
+    try:
+        with conn.cursor(pymysql.cursors.DictCursor) as cursor:
+            cursor.execute(
+                "SELECT name, hp, max_hp, san, max_san, current_location, "
+                "is_dead, is_crazy, inventory, "
+                "DATE_FORMAT(last_active, '%%Y-%%m-%%d %%H:%%i:%%s') as last_active "
+                "FROM players WHERE last_active > NOW() - INTERVAL 5 MINUTE "
+                "ORDER BY last_active DESC"
+            )
+            return cursor.fetchall()
+    finally:
+        conn.close()
+
+
+def get_players_at_location(location):
+    """查询指定位置的在线玩家"""
+    conn = get_connection()
+    try:
+        with conn.cursor(pymysql.cursors.DictCursor) as cursor:
+            cursor.execute(
+                "SELECT name, hp, max_hp, san, max_san, current_location, "
+                "is_dead, is_crazy "
+                "FROM players "
+                "WHERE current_location = %s AND last_active > NOW() - INTERVAL 5 MINUTE",
+                (location,)
+            )
+            return cursor.fetchall()
+    finally:
+        conn.close()
+
+
+def update_player_state(name, hp=None, san=None, current_location=None,
+                        inventory=None, is_dead=None, is_crazy=None):
+    """动态更新玩家状态（只更新非None字段）"""
+    conn = get_connection()
+    try:
+        with conn.cursor() as cursor:
+            sets = []
+            params = []
+            if hp is not None:
+                sets.append("hp = %s")
+                params.append(hp)
+            if san is not None:
+                sets.append("san = %s")
+                params.append(san)
+            if current_location is not None:
+                sets.append("current_location = %s")
+                params.append(current_location)
+            if inventory is not None:
+                sets.append("inventory = %s")
+                params.append(inventory)
+            if is_dead is not None:
+                sets.append("is_dead = %s")
+                params.append(is_dead)
+            if is_crazy is not None:
+                sets.append("is_crazy = %s")
+                params.append(is_crazy)
+
+            if not sets:
+                return {"success": True, "message": "无更新"}
+
+            sets.append("last_active = CURRENT_TIMESTAMP")
+            params.append(name)
+
+            sql = f"UPDATE players SET {', '.join(sets)} WHERE name = %s"
+            cursor.execute(sql, params)
+            conn.commit()
+            return {"success": True, "affected": cursor.rowcount}
+    except Exception as e:
+        conn.rollback()
+        return {"success": False, "message": str(e)}
+    finally:
+        conn.close()
+
+
+def update_player_hp(name, hp_change):
+    """原子更新玩家HP（用于PvP伤害），返回新HP值"""
+    conn = get_connection()
+    try:
+        with conn.cursor(pymysql.cursors.DictCursor) as cursor:
+            cursor.execute(
+                "SELECT hp, max_hp FROM players WHERE name = %s FOR UPDATE",
+                (name,)
+            )
+            player = cursor.fetchone()
+            if not player:
+                return {"success": False, "message": "玩家不存在"}
+
+            new_hp = max(0, min(player["max_hp"], player["hp"] + hp_change))
+            is_dead = new_hp <= 0
+
+            cursor.execute(
+                "UPDATE players SET hp = %s, is_dead = %s, last_active = CURRENT_TIMESTAMP WHERE name = %s",
+                (new_hp, is_dead, name)
+            )
+            conn.commit()
+            return {"success": True, "new_hp": new_hp, "is_dead": is_dead}
+    except Exception as e:
+        conn.rollback()
+        return {"success": False, "message": str(e)}
     finally:
         conn.close()
