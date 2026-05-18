@@ -184,5 +184,6 @@ python frontend/server.py
 | `backend/config.py` | `DB_CONFIG` | 数据库连接信息 |
 
 ---
+<img width="1920" height="1030" alt="34a7fb75-f235-470e-a3ac-545a533d37f5" src="https://github.com/user-attachments/assets/3251cbc8-eb05-4a7f-be74-b7591fde3cde" />
 
 
