@@ -185,6 +185,4 @@ python frontend/server.py
 
 ---
 
-## License
 
-MIT
